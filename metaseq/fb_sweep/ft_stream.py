@@ -10,23 +10,25 @@ from metaseq.fb_sweep.sweep import (
     get_env_from_args,
     main as fb_sweep_main,
 )
-from metaseq.constants import MODEL_SIZES, DATA_LOCATIONS, ComputeEnvs, VALID_SUBSETS
-from metaseq.cbtm_constants import VOCAB_DIR, PATH_TO_1_3B_MODEL, PATH_TO_6_7B_MODEL, DATA_DIR
+#from metaseq.constants import MODEL_SIZES, DATA_LOCATIONS, ComputeEnvs, VALID_SUBSETS
+#from metaseq.cbtm_constants import VOCAB_PATH,PATH_TO_1_3B_MODEL, PATH_TO_6_7B_MODEL, DATA_DIR
+from metaseq.constants import DATA_LOCATIONS, ComputeEnvs, VALID_SUBSETS
+from metaseq.xlbtm_constants import MODEL_SIZES,VOCAB_PATH, PATH_TO_1_7B_MODEL, DATA_DIR
 
 DEFAULT_RANDOM_SEED = 1234
 
 # have to do this at the module level, unfortunately; unable to use args.<env>
 for _cluster, _folder in DATA_LOCATIONS.items():
     if os.path.exists(_folder):
-        
-        
-        from metaseq.fb_sweep.dependency_checks import *  # noqa
+        if _cluster != ComputeEnvs.RSC:
+            from metaseq.fb_sweep.dependency_checks import *  # noqa
         break
 
 PRETRAIN_MODEL_LOCATIONS = {
     ComputeEnvs.FAIR: {
-        "1.3b": PATH_TO_1_3B_MODEL,
-        "6.7b": PATH_TO_6_7B_MODEL
+        #"1.3b": PATH_TO_1_3B_MODEL,
+        "1.7b": PATH_TO_1_7B_MODEL,
+        #"6.7b": PATH_TO_6_7B_MODEL
     }
 }
 
@@ -127,9 +129,9 @@ def get_grid(args):
         H("--train-cluster", [int(x) for x in args.train_cluster.split(',')], save_dir_key=lambda val: f"cluster{val}")
     
 
-    path_to_vocab = VOCAB_DIR
+    path_to_vocab = VOCAB_PATH
     if not path_to_vocab:
-        raise ValueError("VOCAB_DIR must be set in metaseq-internal.cbtm_constants")
+        raise ValueError("VOCAB_PATH must be set in metaseq-internal.cbtm_constants")
     H("--vocab-filename", f"{path_to_vocab}/gpt2-vocab.json")# , save_dir_key=lambda _: "gpt2")
     H(
         "--merges-filename",
@@ -273,6 +275,7 @@ def get_grid(args):
 
 
 def postprocess_hyperparams(args, config):
+    args.azure_folder_auto_name = True
     pass
 
 

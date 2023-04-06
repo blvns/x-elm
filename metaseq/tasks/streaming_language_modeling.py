@@ -34,7 +34,8 @@ from metaseq.dataclass import MetaseqDataclass
 from metaseq.tasks import LegacyTask, register_task
 
 try:
-    from tokenizers import ByteLevelBPETokenizer
+    #from tokenizers import ByteLevelBPETokenizer
+    from transformers import XGLMTokenizerFast
 
     has_hf_tokenizers = True
 except ImportError:
@@ -175,11 +176,13 @@ class StreamingLanguageModelingTask(LegacyTask):
         super().__init__(args)
 
         if not has_hf_tokenizers:
-            raise ImportError("Please install tokenizers with: pip install tokenizers")
+            raise ImportError("Please install tokenizers (or, Transformers if using for XGLM) with: pip install tokenizers/transformers")
 
-        self.tokenizer = ByteLevelBPETokenizer.from_file(
-            args.vocab_filename, args.merges_filename
-        )
+        #loading pretrained XGLM tokenizer and then 
+        #exposing the underlying Tokenizers object
+        self.tokenizer = XGLMTokenizerFast.from_pretrained(
+            'facebook/xglm-1.7B'
+        )._tokenizer
 
 
         self.eod = self.tokenizer.token_to_id(args.end_of_document_symbol)

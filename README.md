@@ -1,6 +1,6 @@
 # Cluster-Branch-Train-Merge (c-BTM)
 
-Code for the paper *[Scaling Expert Language Models with Unsupervised Domain Discovery](https://arxiv.org/abs/2303.14177)*
+Code for the paper *Scaling Expert Language Models with Unsupervised Domain Discovery*
 
 This repository is a fork of [metaseq](https://github.com/facebookresearch/metaseq/).
 
@@ -12,32 +12,16 @@ If you use this code, please consider citing our work:
 @article{cbtm,
  author = {Suchin Gururangan and Margaret Li and Mike Lewis and Weijia Shi and Tim Althoff and Noah A. Smith and Luke Zettlemoyer},
  title = {Scaling Expert Language Models with Unsupervised Domain Discovery},
- journal={arXiv preprint arXiv:2303.14177},
  year = {2023}
 }
 ```
 
-## Set up environment
+## Create a new conda env (recommended)
 
-### Clone this repository
-
-```bash
-git clone https://github.com/kernelmachine/cbtm.git
-cd cbtm
-```
-
-### Create a new conda env (recommended)
+We supply an `environment.yml` file; this will create a conda environment with python 3.9 and a variety of dependencies. This will take a few minutes.
 
 ```bash
-conda create -n cbtm python=3.9
-conda activate cbtm
-
-```
-
-Alternatively, we supply an `environment.yml` file; which can be used to create a conda environment with python 3.9 and a variety of dependencies. This will take a few minutes, and may not work for all versions of conda.
-
-```bash
-conda env create -n cbtm -f environment.yml
+conda env create -f environment.yml
 conda activate cbtm
 ```
 
@@ -54,17 +38,15 @@ pip3 install torch==1.10.1+cu113  -f https://download.pytorch.org/whl/cu113/torc
 Make sure you have a GPU and CUDA visible for this step.
 
 ```bash
-cd ..
 git clone --branch fairseq_v2 https://github.com/ngoyal2707/Megatron-LM.git
 cd Megatron-LM
-pip3 install six regex numpy
+pip3 install six regex
 pip3 install -e .
 ```
 
 ### Install fairscale
 
 ```bash
-cd ..
 git clone https://github.com/facebookresearch/fairscale.git
 cd fairscale
 git checkout prefetch_fsdp_params_simple
@@ -74,7 +56,6 @@ pip3 install -e .
 ### Install balanced-kmeans
 
 ```bash
-cd ..
 git clone https://github.com/kernelmachine/balanced-kmeans.git
 cd balanced-kmeans
 pip3 install -e .
@@ -86,7 +67,6 @@ pip3 install -e .
 Apex may not be compatible with all GPUs. In particular, if you're seeing that CUDA doesn't support your model during the forward pass, you might want to try uninstalling Apex and trying again.
 
 ```bash
-cd ..
 git clone https://github.com/NVIDIA/apex.git
 cd apex
 git checkout e2083df5eb96643c61613b9df48dd4eea6b07690
@@ -100,19 +80,11 @@ pip3 install -v --no-cache-dir --global-option="--cpp_ext" --global-option="--cu
 
 ### Install c-BTM library
 
-Build the c-BTM library.
+Build the c-BTM library. This won't really do anything if you've used the `environment.yml` file to build your conda environment.
 
 ```bash
-cd ../cbtm
+cd /path/to/cbtm
 pip3 install -e .
-```
-
-### Fix setuptools version
-
-There is a known compatibility problem between the above torch version and setuptools>=59.6.0, so we roll this package back:
-
-```bash
-pip3 install setuptools==59.5.0
 ```
 
 
@@ -123,7 +95,7 @@ pip3 install setuptools==59.5.0
 We'll use the following environment variables in this tutorial, for simplicity. You can set these to whatever you want.
 
 ```bash
-export CBTM_DIR=~/cbtm; 
+export CBTM_DIR=$PWD; 
 export DATA_DIR=${CBTM_DIR}/data;
 export SERIALIZATION_DIR=${CBTM_DIR}/experiments;
 export KMEANS_DIR=${CBTM_DIR}/clusterers;
@@ -146,13 +118,15 @@ Make sure the variables in `metaseq/cbtm_constants.py` are consistent with the p
 We use the GPT-2 vocabulary:
 
 ```bash
+mkdir -p $VOCAB_DIR
 wget -O $VOCAB_DIR/gpt2-vocab.json http://s3.wasabisys.com/c4-example/vocab/gpt2-vocab.json
 wget -O $VOCAB_DIR/gpt2-merges.txt http://s3.wasabisys.com/c4-example/vocab/gpt2-merges.txt
 ```
 
-Download the OPT-1.3B and OPT-6.7B checkpoints, which we use as our seed models. If you don't plan to use the 6.7B model, you can skip the last 2 wgets, which will take a while to complete:
+Download the OPT-1.3B and OPT-6.7B checkpoints, which we use as our seed models:
 
 ```bash
+mkdir -p $PRETRAINED_MODELS_DIR
 mkdir -p ${PRETRAINED_MODELS_DIR}/opt/1.3b/
 mkdir -p ${PRETRAINED_MODELS_DIR}/opt/6.7b/
 wget -qO- dl.fbaipublicfiles.com/cbtm/opt_models/1.3B/sharded_for_ddp.tgz | tar xvz  --strip-components 6 -C ${PRETRAINED_MODELS_DIR}/opt/1.3b/
@@ -162,6 +136,7 @@ wget -qO- dl.fbaipublicfiles.com/cbtm/opt_models/6.7B/sharded_for_ddp_part_1.tgz
 ```
 
 
+
 ### Download data
 
 We provide some sample C4 data to get you started. Our model only expects (sharded) line-separated jsonl files, split into train and validation data. If you'd like to train on your own data, just follow the overall data layout in the example. 
@@ -169,7 +144,7 @@ We provide some sample C4 data to get you started. Our model only expects (shard
 
 ```bash
 mkdir -p ${DATA_DIR}/c4_example/
-wget -qO- http://s3.wasabisys.com/c4-example/c4_example.tar.gz | tar xvz -C ${DATA_DIR}/
+wget -qO- http://s3.wasabisys.com/c4-example/c4_example.tar.gz | tar xvz -C ${DATA_DIR}/c4_example/
 ```
 
 This example dataset is a single shard of C4 and a small sample of data from the validation dataset. 
@@ -263,24 +238,15 @@ The following command will train 8 expert models with 4 GPUs each for 50 steps (
 
 
 ```bash
-DATASET=c4_example;
 NUM_CLUSTERS=8;
-NUM_GPUS_PER_EXPERT=4;
-
-if [[ "$NUM_GPUS_PER_EXPERT" -lt 8 ]]; then
-    NUM_NODES=1
-    NUM_GPUS_PER_NODE=$NUM_GPUS
-else 
-    NUM_NODES=$((NUM_GPUS/8))
-    NUM_GPUS_PER_NODE=8
-fi
+DATASET=c4_example;
 python -m metaseq.scripts.train_cbtm \
    --model-size 1.3b \
    --run slurm   \
    --path-to-clusters-dir $CLUSTERS_DIR/${DATASET}/$NUM_CLUSTERS/ \
    --num-clusters $NUM_CLUSTERS  \
-   --num-nodes $NUM_NODES \
-   --num-gpus $NUM_GPUS_PER_NODE \
+   --num-nodes 1 \
+   --num-gpus 4 \
    --data-name ${DATASET}  \
    --path-to-data $DATA_DIR/${DATASET} \
    --learning-rate 2e-4 \
@@ -302,21 +268,13 @@ The following command will train a dense model with 4 GPUs for 50 steps (increas
 
 ```bash
 DATASET=c4_example;
-NUM_GPUS_PER_EXPERT=4;
-
-if [[ "$NUM_GPUS_PER_EXPERT" -lt 8 ]]; then
-    NUM_NODES=1
-    NUM_GPUS_PER_NODE=$NUM_GPUS
-else 
-    NUM_NODES=$((NUM_GPUS/8))
-    NUM_GPUS_PER_NODE=8
-fi
 python -m metaseq.scripts.train_cbtm \
    --num-clusters 1 \
    --model-size 1.3b \
    --run slurm \
-   --num-nodes $NUM_NODES \
-   --num-gpus $NUM_GPUS_PER_NODE \
+   --data-name $DATASET  \
+   --num-nodes 1 \
+   --num-gpus 4 \
    --data-name ${DATASET}  \
    --path-to-data $DATA_DIR/$DATASET  \
    --learning-rate 2e-4 \
@@ -335,14 +293,12 @@ This command will output checkpoints to `${SERIALIZATION_DIR}/1_clusters/`.
 
 To evaluate your models, first consolidate your shards into a single checkpoint file.
 
-The following script depends on the [`gnu-parallel`](https://www.gnu.org/software/parallel/) package. You may need to modify the last line of `metaseq/scripts
-/consolidate_fsdp_shards.sh` to point to your gnu-parallel path.
+The following script depends on the [`gnu-parallel`](https://www.gnu.org/software/parallel/) package.
 
 
 ```bash
 NUM_CLUSTERS=8;
-NUM_GPUS_PER_EXPERT=4;
-bash metaseq/scripts/consolidate_fsdp_shards.sh ${SERIALIZATION_DIR}/${NUM_CLUSTERS}_clusters/ "*ngpu${NUM_GPUS_PER_EXPERT}"
+bash metaseq/scripts/consolidate_fsdp_shards.sh ${SERIALIZATION_DIR}/${NUM_CLUSTERS}_clusters/ "*ngpu4"
 ```
 
 This will create a `consolidated.pt` checkpoint in each model's folder. 
