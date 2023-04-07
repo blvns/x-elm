@@ -163,7 +163,6 @@ def get_grid(args):
     H("--distribute-checkpointed-activations")
     H("--arch", "transformer_lm_megatron")
     H("--activation-fn", "relu")
-    H("--decoder-learned-pos")
     H("--share-decoder-input-output-embed")
     if not args.embdr:
         H("--no-emb-dropout", save_dir_key=lambda _: "0edr")
@@ -175,7 +174,8 @@ def get_grid(args):
     H("--checkpoint-activations", binary_flag=True) #, save_dir_key=lambda _: "ckpt")
     # this model requires checkpoint activations to load
     H("--use-sharded-state")
-    H("--decoder-learned-pos")
+    #sinusoidal embeddings for XGLM
+    #H("--decoder-learned-pos")
     H("--gradient-predivide-factor", 32.0)
     H("--no-scale-embedding")
     H("--full-megatron-init")

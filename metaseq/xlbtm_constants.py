@@ -6,29 +6,29 @@ DEFAULT_SLURM_CONSTRAINT="[rtx6k|a40|a100]"
 DEFAULT_SLURM_PARTITION="gpu-a40"
 
 # path to data directory
-DATA_DIR="/gscratch/zlab/blvns/cbtm/data/"
+DATA_DIR="/gscratch/zlab/blvns/xl-btm/data/"
 
 # where models will be saved (we will add them under a folder called `opt_ft` in this directory)
-SERIALIZATION_DIR="/gscratch/zlab/blvns/cbtm/experiments/"
+SERIALIZATION_DIR="/gscratch/zlab/blvns/xl-btm/experiments/"
 
 # path to vocabulary (gpt2-merges.txt and gpt2-encoder.json)
-#VOCAB_PATH="/gscratch/zlab/blvns/cbtm/vocab/gpt2/"
-VOCAB_PATH="/gscratch/zlab/blvns/cbtm/vocab/xglm/"
+#VOCAB_PATH="/gscratch/zlab/blvns/xlbtm/vocab/gpt2/"
+VOCAB_PATH="/gscratch/zlab/blvns/xl-btm/vocab/xglm/"
 
 # path to pretrained models
-#PRETRAINED_MODELS_DIR="/gscratch/zlab/blvns/cbtm/pretrained_models/opt/"
-PRETRAINED_MODELS_DIR="/gscratch/zlab/blvns/cbtm/pretrained_models/xglm/"
+#PRETRAINED_MODELS_DIR="/gscratch/zlab/blvns/xlbtm/pretrained_models/opt/"
+PRETRAINED_MODELS_DIR="/gscratch/zlab/blvns/xl-btm/pretrained_models/xglm/"
 
 # path to 1.3B parameter OPT checkpoint
-#PATH_TO_1_3B_MODEL="/gscratch/zlab/blvns/cbtm/pretrained_models/opt/1.3b/checkpoint_last.pt"
+#PATH_TO_1_3B_MODEL="/gscratch/zlab/blvns/xlbtm/pretrained_models/opt/1.3b/checkpoint_last.pt"
 # path to 6.7B parameter OPT checkpoint
 #PATH_TO_6_7B_MODEL="/gscratch/zlab/blvns/opt/6.7b/checkpoint_last.pt"
 
 # path to 1.7B parameter XGLM checkpoint
-PATH_TO_1_7B_MODEL="/gscratch/zlab/blvns/cbtm/pretrained_models/xglm/1.7b/model.pt"
+PATH_TO_1_7B_MODEL="/gscratch/zlab/blvns/xl-btm/pretrained_models/xglm/1.7b/model.pt"
 
-# path to cbtm library
-PATH_TO_CBTM="/gscratch/zlab/blvns/cbtm/"
+# path to xlbtm library
+PATH_TO_CBTM="/gscratch/zlab/blvns/xl-btm/"
 
 
 #overriding model sizes from constants.py to include XGLM

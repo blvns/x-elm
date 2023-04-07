@@ -58,7 +58,7 @@ if __name__ == '__main__':
     if not PATH_TO_CBTM:
         raise ValueError("PATH_TO_CBTM must be set in metaseq/cbtm_constants.py.")
 
-    command = f"bash {PATH_TO_CBTM}/metaseq/scripts/train_cbtm.sh \
+    command = f"bash {PATH_TO_CBTM}/metaseq/scripts/train_xlbtm.sh \
                 {args.num_nodes} \
                 {args.num_gpus} \
                 {args.model_size} \
