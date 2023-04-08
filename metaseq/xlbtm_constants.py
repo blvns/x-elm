@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 # SLURM variables
 DEFAULT_SLURM_ACCOUNT="zlab"
-DEFAULT_SLURM_CONSTRAINT="[rtx6k|a40|a100]"
+DEFAULT_SLURM_CONSTRAINT="[rtx6k|a40]"
 DEFAULT_SLURM_PARTITION="gpu-a40"
 
 # path to data directory
@@ -25,7 +25,7 @@ PRETRAINED_MODELS_DIR="/gscratch/zlab/blvns/xl-btm/pretrained_models/xglm/"
 #PATH_TO_6_7B_MODEL="/gscratch/zlab/blvns/opt/6.7b/checkpoint_last.pt"
 
 # path to 1.7B parameter XGLM checkpoint
-PATH_TO_1_7B_MODEL="/gscratch/zlab/blvns/xl-btm/pretrained_models/xglm/1.7b/model.pt"
+PATH_TO_1_7B_MODEL="/gscratch/zlab/blvns/xl-btm/pretrained_models/xglm/1.7b/xglm.pt"
 
 # path to xlbtm library
 PATH_TO_CBTM="/gscratch/zlab/blvns/xl-btm/"

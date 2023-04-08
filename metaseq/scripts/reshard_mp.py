@@ -1,4 +1,4 @@
-# Copyright (c) Meta Platforms, Inc. and affiliates. All Rights Reserved.
+#Copyright (c) Meta Platforms, Inc. and affiliates. All Rights Reserved.
 #
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
@@ -110,7 +110,9 @@ def reshard_model_parallel_parts(
             "shard_metadata",
         ]:
             state_dict[key] = rank0_state_dict.get(key, None)
-        state_dict["cfg"]["model"].model_parallel_size = M
+        
+        state_dict["cfg"]["model"]["model_parallel_size"] = M
+        print(state_dict["cfg"]["model"]["model_parallel_size"])
 
         output_file = output.format(i=i)
         os.makedirs(os.path.dirname(output_file), exist_ok=True)
