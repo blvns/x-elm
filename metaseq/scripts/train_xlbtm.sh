@@ -22,6 +22,7 @@ ACCOUNT=${21}
 CONSTRAINT=${22}
 MAX_STEPS=${23}
 ADD_CLUSTER_TOKEN=${24}
+JOB_TIME=${25}
 
 if [ $TRAIN_CLUSTER == "None" ]; then
     TRAIN_CLUSTER="";
@@ -123,4 +124,5 @@ python -m metaseq.fb_sweep.ft_stream \
     $JOBARRAY_PHRASE \
     --script ${PATH_TO_CBTM}/metaseq_cli/train.py \
     --constraint $CONSTRAINT \
-    --subset $SUBSET
+    --subset $SUBSET\
+    --time $JOB_TIME

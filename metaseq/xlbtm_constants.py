@@ -3,7 +3,7 @@ from dataclasses import dataclass
 # SLURM variables
 DEFAULT_SLURM_ACCOUNT="zlab"
 DEFAULT_SLURM_CONSTRAINT="[rtx6k|a40]"
-DEFAULT_SLURM_PARTITION="gpu-a40"
+DEFAULT_SLURM_PARTITION="gpu-rtx6k"
 
 # path to data directory
 DATA_DIR="/gscratch/zlab/blvns/xl-btm/data/"

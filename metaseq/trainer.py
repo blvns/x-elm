@@ -331,8 +331,10 @@ class Trainer(object):
     def state_dict(self, filename, training_finished=False) -> Dict[str, Dict]:
         model_state_dict = self.model.state_dict()
         optim_state = None
-        if not self.cfg.checkpoint.no_save_optimizer_state:
-            optim_state = self._gathered_optim_state or self.optimizer.state_dict()
+        
+        #DEBUGGING
+        #if not self.cfg.checkpoint.no_save_optimizer_state:
+        #    optim_state = self._gathered_optim_state or self.optimizer.state_dict()
         model_save_list = [
             (
                 filename,
@@ -421,6 +423,10 @@ class Trainer(object):
         other ranks.
         """
         extra_state, self._optim_history, last_optim_state = None, [], None
+
+        #DEBUGGING
+        self.save_checkpoint('/gscratch/zlab/blvns/xl-btm/pretrained_models/xglm/tmp', extra_state=None, training_finished=True)
+        quit()
 
         is_distributed = self.data_parallel_world_size > 1
         bexists = PathManager.isfile(filename)

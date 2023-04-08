@@ -45,6 +45,7 @@ if __name__ == '__main__':
     parser.add_argument('--slurm-partition',  type=str, default=DEFAULT_SLURM_PARTITION)
     parser.add_argument('--slurm-account', type=str, default=DEFAULT_SLURM_ACCOUNT)
     parser.add_argument('--slurm-constraint',  type=str, default=DEFAULT_SLURM_CONSTRAINT)
+    parser.add_argument('--time', type=str, default='72:00:00')
 
     args = parser.parse_args()
 
@@ -83,5 +84,6 @@ if __name__ == '__main__':
                 {args.slurm_constraint} \
                 {args.max_steps} \
                 {args.add_cluster_token} \
+                {args.time} \
                 "
     subprocess.run(command.split(), check=True, text=True)
