@@ -75,19 +75,20 @@ def get_grid(args):
 
     size = MODEL_SIZES[args.model_size]
     
-    if args.finetune_from_model is None and args.restore_file is None:
-        args.finetune_from_model = PRETRAIN_MODEL_LOCATIONS[cluster_env][
-            args.model_size
-        ]
+    # DEBUGGING
+    #if args.finetune_from_model is None and args.restore_file is None:
+    #    args.finetune_from_model = PRETRAIN_MODEL_LOCATIONS[cluster_env][
+    #        args.model_size
+    #    ]
 
-    if args.restore_file:
-        H("--restore-file", args.restore_file, save_dir_key=lambda _: args.model_size)
-    elif args.finetune_from_model:
-        H(
-            "--finetune-from-model",
-            args.finetune_from_model,
-            save_dir_key=lambda _: args.model_size,
-        )
+    #if args.restore_file:
+    #    H("--restore-file", args.restore_file, save_dir_key=lambda _: args.model_size)
+    #elif args.finetune_from_model:
+    #    H(
+    #        "--finetune-from-model",
+    #        args.finetune_from_model,
+    #        save_dir_key=lambda _: args.model_size,
+    #    )
 
     grid += [
         hyperparam("--no-epoch-checkpoints"),

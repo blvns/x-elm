@@ -332,9 +332,8 @@ class Trainer(object):
         model_state_dict = self.model.state_dict()
         optim_state = None
         
-        #DEBUGGING
-        #if not self.cfg.checkpoint.no_save_optimizer_state:
-        #    optim_state = self._gathered_optim_state or self.optimizer.state_dict()
+        if not self.cfg.checkpoint.no_save_optimizer_state:
+            optim_state = self._gathered_optim_state or self.optimizer.state_dict()
         model_save_list = [
             (
                 filename,
