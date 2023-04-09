@@ -424,10 +424,6 @@ class Trainer(object):
         """
         extra_state, self._optim_history, last_optim_state = None, [], None
 
-        #DEBUGGING
-        self.save_checkpoint('/gscratch/zlab/blvns/xl-btm/pretrained_models/xglm/tmp', extra_state=None, training_finished=True)
-        quit()
-
         is_distributed = self.data_parallel_world_size > 1
         bexists = PathManager.isfile(filename)
         if bexists:
