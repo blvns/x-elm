@@ -43,7 +43,7 @@ def main(args):
 	vocab, merges = extractor.extract()
 
 	#write out vocab dict as .json file
-	vocab_filepath = os.path.join(args.output_path, "{}-voacb.json".format(args.model_name))
+	vocab_filepath = os.path.join(args.output_path, "{}-vocab.json".format(args.model_name))
 	with open(vocab_filepath, 'w') as f:
 		json.dump(vocab, f)
 

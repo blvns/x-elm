@@ -92,7 +92,7 @@ class ModelParallelMultiheadAttention(nn.Module):
             not self.self_attention or self.qkv_same_dim
         ), "Self-attention requires query, key and value to be of the same size"
 
-        self.combine_qkv_proj = True
+        self.combine_qkv_proj = False #True
         if self.combine_qkv_proj:
 
             def _init_method_weight_cpu(weight):

@@ -3,7 +3,7 @@ from dataclasses import dataclass
 # SLURM variables
 DEFAULT_SLURM_ACCOUNT="zlab"
 DEFAULT_SLURM_CONSTRAINT="[rtx6k|a40]"
-DEFAULT_SLURM_PARTITION="gpu-rtx6k"
+DEFAULT_SLURM_PARTITION="gpu-a40"
 
 # path to data directory
 DATA_DIR="/gscratch/zlab/blvns/xl-btm/data/"
@@ -67,7 +67,7 @@ M = 1024 * 1024  # 1 million
 
 #adding XGLM
 MODEL_SIZES = {
-	'1.7b': Size(24, 2048, 32, 64, int(1.0 * M), 2.0e-4, 2)
+	'1.7b': Size(24, 2048, 16, 128, int(1.0 * M), 2.0e-4, 2)
 }
 
 # from appendix b of https://arxiv.org/pdf/2005.14165.pdf

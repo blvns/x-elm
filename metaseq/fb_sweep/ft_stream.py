@@ -74,6 +74,7 @@ def get_grid(args):
             args.train_subset = ",".join(avail_train_subsets)
 
     size = MODEL_SIZES[args.model_size]
+    
     if args.finetune_from_model is None and args.restore_file is None:
         args.finetune_from_model = PRETRAIN_MODEL_LOCATIONS[cluster_env][
             args.model_size
@@ -98,8 +99,8 @@ def get_grid(args):
         hyperparam("--validate-interval-updates", args.interval),
     ]
     # hyperparam("--no-save-optimizer-state"),
-    if args.validate_at_beginning:
-        grid += [hyperparam("--validate-at-beginning")]
+    #if args.validate_at_beginning:
+    #grid += [hyperparam("--validate-at-beginning")]
     if args.no_save:
         H("--no-save")
     else:
@@ -334,6 +335,7 @@ def add_args(parser):
     parser.add_argument("--train-cluster", type=str, default=None)
     parser.add_argument("--random-clusters", action="store_true")
     parser.add_argument("--add-cluster-token", action="store_true")
+    parser.add_argument("--validate_at_beginning", action="store_true")
 
     parser.add_argument("--num-clusters", type=int)
     parser.add_argument("--cluster-tag", type=str)

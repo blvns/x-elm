@@ -111,8 +111,8 @@ def reshard_model_parallel_parts(
         ]:
             state_dict[key] = rank0_state_dict.get(key, None)
         
-        state_dict["cfg"]["model"]["model_parallel_size"] = M
-        print(state_dict["cfg"]["model"]["model_parallel_size"])
+        state_dict["cfg"]["model"].model_parallel_size = M
+        print(state_dict["cfg"]["model"].model_parallel_size)
 
         output_file = output.format(i=i)
         os.makedirs(os.path.dirname(output_file), exist_ok=True)
