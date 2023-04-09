@@ -41,7 +41,8 @@ class StreamingFinetuneLanguageModelingTask(StreamingLanguageModelingTask):
     def _tokenize_src_tgt_json(self, json):
         src = json["text"].rstrip(" ")
         full_tokens = torch.LongTensor(
-            self.tokenizer.encode(src).ids + [self.eod]
+            #Terra: no .ids because we're using the HF Transformer wrapper
+            self.tokenizer.encode(src) + [self.eod]
         )
         # src_tokens_len = len(self.tokenizer.encode(src).ids)
         # tgt_tokens = torch.clone(full_tokens)

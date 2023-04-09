@@ -252,6 +252,11 @@ class StreamingLanguageModelingTask(LegacyTask):
         assert self.dictionary.unk_index == 3
         assert self.tokenizer.id_to_token(3) in {"<UNK>", "<unk>"}
 
+        #Terra: using HF Transformer tokenizer wrapper for mapping of XGLM token ids
+        self.tokenizer = XGLMTokenizerFast.from_pretrained(
+            'facebook/xglm-1.7B'
+        )
+
     @classmethod
     def setup_task(cls, args, **kwargs):
         return cls(args)
@@ -260,7 +265,7 @@ class StreamingLanguageModelingTask(LegacyTask):
         text = json["text"]
         return torch.LongTensor(
             # append an end-of-document symbol after each document
-            self.tokenizer.encode(text.rstrip()).ids
+            self.tokenizer.encode(text.rstrip()) #Terra: .ids since we're using Transformer wrapper
             + [self.eod]
         )
 
