@@ -163,7 +163,9 @@ def get_grid(args):
     H("--criterion", "vocab_parallel_cross_entropy")
     H("--distribute-checkpointed-activations")
     H("--arch", "transformer_lm_megatron")
-    H("--activation-fn", "relu")
+    #H("--activation-fn", "relu")
+    #XGLM uses GeLU activations
+    H{"--activation-fn", "gelu"}
     H("--share-decoder-input-output-embed")
     if not args.embdr:
         H("--no-emb-dropout", save_dir_key=lambda _: "0edr")
