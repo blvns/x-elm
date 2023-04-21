@@ -17,6 +17,71 @@ def _calc_self_attn(xglm, key):
 
 	return xglm_qvk 
 
+def _recurse_settings(xglm, empty, name):
+	recursed_keys = []
+	shared_keys = []
+	not_shared_keys = []
+
+	try: xglm = vars(xglm) 
+	except: tmp=1
+
+	try: empty = vars(empty) 
+	except: tmp=1
+
+	for sub_key in xglm:
+		if type(xglm[sub_key]) == dict and sub_key in empty:
+			recursed_keys.append(sub_key)
+		elif sub_key in empty:
+			shared_keys.append(sub_key)
+		else:
+			not_shared_keys.append(sub_key)
+
+	print('SHARED in {}'.format(name))
+	print('{}\t{}\t{}'.format('Key', 'XGLM', 'Empty'))
+	for k in shared_keys:
+		if xglm[k] != empty[k]: print('{}\t{}\t{}'.format(k, xglm[k], empty[k]))
+	print(' ')
+	print('NOT SHARED in {}'.format(name))
+	print('{}\t{}\t{}'.format('Key', 'XGLM', 'Empty'))
+	for k in not_shared_keys:
+		print('{}\t{}\t{}'.format(k, xglm[k], '--'))
+	print(' ')
+	print('Extras in Empty ONLY!')
+	print('{}\t{}\t{}'.format('Key', 'XGLM', 'Empty'))
+	for k in empty:
+		if k not in shared_keys and k not in not_shared_keys:
+			print('{}\t{}\t{}'.format(k, '---', empty[k]))
+
+	for k in recursed_keys:
+		print('Recursing settings...')
+		_recurse_settings(xglm[k], empty[k], k)
+		print('++++++++++++++++++++++++++')
+		print(' ')
+
+
+def check_settings(empty, xglm):
+	setting_keys = list(xglm.keys())
+	for s_key in setting_keys:
+		#wrapped in a list for some reason
+		if s_key == 'optimizer_history':
+			xglm[s_key] = xglm[s_key][0]
+			empty[s_key] = empty[s_key][0] 
+
+
+		if s_key == 'model': 
+			continue #model weights handled later
+		if xglm[s_key] == None or len(xglm[s_key]) == 0:
+			print(xglm[s_key])
+			try: print(empty[s_key])
+			except:print(s_key, 'not in empty state dict')
+		else:
+			_recurse_settings(xglm[s_key], empty[s_key], s_key)
+			input('...')
+
+		print('-------------------------')
+		print(' ')
+	quit()
+
 def main(args):
 
 	empty = torch.load(args.empty_state)
@@ -24,6 +89,9 @@ def main(args):
 
 	#add XGLM training langs to the empty state
 	empty['cfg']['task']['langs'] = xglm['cfg']['task']['langs']
+
+	#make sure settings match
+	check_settings(empty, xglm)
 
 	#put xglm model weights into empty state
 	missing_flag = False

@@ -12,8 +12,10 @@ DATA_DIR="/gscratch/zlab/blvns/xl-btm/data/"
 SERIALIZATION_DIR="/gscratch/zlab/blvns/xl-btm/experiments/"
 
 # path to vocabulary (gpt2-merges.txt and gpt2-encoder.json)
+#DEBUGGING -- shouldn't be used but will break if used to init a tokenizer with xglm
 #VOCAB_PATH="/gscratch/zlab/blvns/xlbtm/vocab/gpt2/"
-VOCAB_PATH="/gscratch/zlab/blvns/xl-btm/vocab/xglm/"
+#VOCAB_PATH="/gscratch/zlab/blvns/xl-btm/vocab/xglm/"
+VOCAB_PATH = "."
 
 # path to pretrained models
 #PRETRAINED_MODELS_DIR="/gscratch/zlab/blvns/xlbtm/pretrained_models/opt/"
