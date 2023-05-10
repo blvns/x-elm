@@ -139,7 +139,9 @@ def get_grid(args):
         f"{path_to_vocab}/gpt2-merges.txt",
     )
     H("--sample-break-mode", args.sbm) # , save_dir_key=lambda val: f"sbm_{val}")
-
+    
+    #Terra: setting sampling alpha for diff languages
+    H("--multicorpus-sampling-alpha", args.sample_alpha)
 
     if args.valid_subset == "valid":
         H(
@@ -165,7 +167,7 @@ def get_grid(args):
     H("--arch", "transformer_lm_megatron")
     #H("--activation-fn", "relu")
     #XGLM uses GeLU activations
-    H{"--activation-fn", "gelu"}
+    H("--activation-fn", "gelu")
     H("--share-decoder-input-output-embed")
     if not args.embdr:
         H("--no-emb-dropout", save_dir_key=lambda _: "0edr")
@@ -342,6 +344,7 @@ def add_args(parser):
 
     parser.add_argument("--num-clusters", type=int)
     parser.add_argument("--cluster-tag", type=str)
+    parser.add_argument("--sample-alpha", type=float, default=1.0)
 
 if __name__ == "__main__":
     fb_sweep_main(get_grid, postprocess_hyperparams, add_extra_options_func=add_args)

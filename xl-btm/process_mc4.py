@@ -4,7 +4,7 @@ import argparse
 import time
 import numpy as np
 
-PATH_TO_CACHE = '/gscratch/scrubbed/blvns/'
+PATH_TO_CACHE = '/gscratch/zlab/blvns/hf_cache/'
 
 SHARD_COUNTS = {
     "af": {"train": 64, "validation": 1},
@@ -137,6 +137,7 @@ def main(args):
             split_ids_arr = np.array_split(split_ids, SHARD_COUNTS[lang][split])
             print(len(split_ids_arr))
 
+
             for shard_idx, shard_ids in enumerate(split_ids_arr):
                 if shard_idx >= 1024:
                 	break
@@ -150,14 +151,10 @@ def main(args):
 
                 start = time.time()	
 
-                #get individual shards of dataset to process
-                #load only indexes for shard
-                #shard = load_dataset('mc4', lang, split='{}[{}:{}]'.format(split, shard_ids[0], shard_ids[-1]+1), cache_dir=PATH_TO_CACHE)
-                #shard = load_dataset('mc4', lang, split='{}'.format(split), cache_dir=PATH_TO_CACHE)
                 shard = mc4.select(shard_ids)
 
                 #add index for each element in shard
-                element_idxs = list(range(0, len(shard)))
+                element_idxs = list(range(0, len(shard_ids)))
                 shard = shard.add_column(name="id", column=element_idxs)
 
                 #DEBUGGING

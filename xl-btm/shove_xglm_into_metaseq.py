@@ -91,7 +91,7 @@ def main(args):
 	empty['cfg']['task']['langs'] = xglm['cfg']['task']['langs']
 
 	#make sure settings match
-	check_settings(empty, xglm)
+	#check_settings(empty, xglm)
 
 	#put xglm model weights into empty state
 	missing_flag = False

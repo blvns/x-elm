@@ -125,4 +125,5 @@ python -m metaseq.fb_sweep.ft_stream \
     --script ${PATH_TO_CBTM}/metaseq_cli/train.py \
     --constraint $CONSTRAINT \
     --subset $SUBSET\
-    --time $JOB_TIME
+    --time $JOB_TIME\
+    --sample-alpha 0.3
