@@ -86,6 +86,6 @@ if __name__ == '__main__':
                 {args.max_steps} \
                 {args.add_cluster_token} \
                 {args.time} \
-                {args.sample_alpha}
+                {args.sample_alpha} \
                 "
     subprocess.run(command.split(), check=True, text=True)
