@@ -1,6 +1,8 @@
 import os
 import pandas as pd
 from tqdm import tqdm
+from joblib import Parallel, delayed
+import pickle
 
 from matplotlib import pyplot as plt
 import seaborn as sns
@@ -12,18 +14,26 @@ def _count_data(data):
 	wc = 0
 	lc = 0
 
-	print(data[0])
-	for d in data:
-		text = d['data']
+	shard_text = data['text'].to_list()
+	for text in shard_text:
 		wc += len(text.split())
 		lc += len(text.split('\n'))
 
 	dc = len(data)
 	return wc, lc, dc
 
+def _process_file(d, shard_path_prefix):
+	lang, _ = d.split('.')
+	d_path = os.path.join(shard_path_prefix, d) 
+	data_json = pd.read_json(path_or_buf=d_path, lines=True)
+
+	#count words, lines, docs in lang file
+	wc, lc, dc = _count_data(data_json)
+	return lang, wc, lc, dc
+
 def main():
 
-	DATA_DIR = "/gscratch/zlab/blvns/xl-btm/data/mc4_reformatted/"
+	DATA_DIR = "/gscratch/zlab/blvns/xl-btm/data/mc4/"
 	DATA_SUB_DIRS = ['train', 'valid']
 	
 	#for every subdirectory in source directory
@@ -33,24 +43,20 @@ def main():
 		line_counts = {}
 		doc_counts = {}
 
+
 		#get all shard dirs 
 		shard_dirs = os.listdir(path_prefix) 
-		print(shard_dirs)
+		#print(shard_dirs)
 
 		#for every shard...
 		for sd in tqdm(shard_dirs):
 			shard_path_prefix = os.path.join(path_prefix, sd)
 			data_files = [f for f in os.listdir(shard_path_prefix) if os.path.isfile(os.path.join(shard_path_prefix, f))]
 
-			#load each lang file
-			for d in data_files:
-				lang, _ = d.split('.')
-				d_path = os.path.join(shard_path_prefix, d) 
-				data_json = pd.read_json(path_or_buf=file_path, lines=True)
+			timeout=99999
+			results_arr = Parallel(n_jobs=4, timeout=timeout)(delayed(_process_file)(d, shard_path_prefix) for d in data_files)
 
-				#count words, lines, docs in lang file
-				wc, lc, dc = _count_data(data_json)
-
+			for lang, wc, lc, dc in results_arr:
 				#update word_counts, line_counts, doc_counts
 				if lang in word_counts:
 					word_counts[lang] += wc
@@ -60,6 +66,10 @@ def main():
 					word_counts[lang] = wc
 					line_counts[lang] = lc
 					doc_counts[lang] = dc
+
+		with open("./mc4_{}_dists.pkl", 'wb') as f:
+			pickle.dump((word_counts, line_counts, doc_counts), f)
+						
 
 		#make a histogram of data distributions for this split
 		#https://seaborn.pydata.org/generated/seaborn.histplot.html
