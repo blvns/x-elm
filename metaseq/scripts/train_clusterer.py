@@ -237,6 +237,9 @@ class NumberNormalizingVectorizer(TfidfVectorizer):
 
 
 def train_vectorizer(file, path_to_vectorizer):
+    print(path_to_vectorizer)
+    path_to_vectorizer=str(path_to_vectorizer)
+    
     #Terra: not filtering stopwords for multilingual clustering
     stop_words = [] #list(text.ENGLISH_STOP_WORDS.union(["#NUMBER"]))
 
@@ -255,6 +258,8 @@ def train_vectorizer(file, path_to_vectorizer):
 
 
 def train_kmeans(vecs, n_clusters, path_to_kmeans, balanced=False):
+    print(path_to_kmeans)
+    path_to_kmeans=str(path_to_kmeans)
     if torch.cuda.is_available():
         device = torch.device('cuda')
     else:
