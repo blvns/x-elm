@@ -237,8 +237,8 @@ class NumberNormalizingVectorizer(TfidfVectorizer):
 
 
 def train_vectorizer(file, path_to_vectorizer):
-    # english stopwords plus the #NUMBER dummy token
-    stop_words = list(text.ENGLISH_STOP_WORDS.union(["#NUMBER"]))
+    #Terra: not filtering stopwords for multilingual clustering
+    stop_words = [] #list(text.ENGLISH_STOP_WORDS.union(["#NUMBER"]))
 
     model = Pipeline([('tfidf', NumberNormalizingVectorizer(stop_words=stop_words)),
                       ('svd', TruncatedSVD(n_components=100)),

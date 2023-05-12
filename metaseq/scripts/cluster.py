@@ -12,7 +12,7 @@ from tqdm.auto import tqdm
 from kmeans_pytorch import KMeans
 from sklearn.feature_extraction.text import TfidfVectorizer
 from metaseq.data import JsonlDataset
-from metaseq.cbtm_constants import DEFAULT_SLURM_ACCOUNT, DEFAULT_SLURM_CONSTRAINT, DEFAULT_SLURM_PARTITION
+from metaseq.xlbtm_constants import DEFAULT_SLURM_ACCOUNT, DEFAULT_SLURM_CONSTRAINT, DEFAULT_SLURM_PARTITION
 
 def get_shard_str(epoch, data_dir, split):
     shards = {}

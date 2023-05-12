@@ -16,31 +16,37 @@ def main():
 	
 	#for every subdirectory in source directory
 	for sub_dir in SOURCE_SUB_DIRS:
+
 		source_path_prefix = os.path.join(SOURCE_DIR, sub_dir)
 
-		#get all files in this subdirectory
-		source_files = [f for f in os.listdir(source_path_prefix) if os.path.isfile(os.path.join(source_path_prefix, f))]
+		#get all shard dirs 
+		shard_dirs = os.listdir(source_path_prefix) 
+		#print(shard_dirs)
 
-		#for every file in subdirectory...
-		for sf in tqdm(source_files):
-			#parse information
-			#print(sf)
-			_, _, lang, shard, _ = sf.split('.')
-			#print(lang, shard)
+		#for every shard...
+		for shard_dir in tqdm(shard_dirs):
 
-			#make target directory if it doesn't exist
-			shard_dir = shard.zfill(5) 
-			target_path_prefix = os.path.join(TARGET_DIR, sub_dir, shard_dir)
-			#print(target_path_prefix)
-			pathlib.Path(target_path_prefix).mkdir(parents=True, exist_ok=True)
+			source_path_prefix2 = os.path.join(source_path_prefix, shard_dir)
 
-			#TODO move file to target directory
-			source_path = os.path.join(source_path_prefix, sf)
-			tf = '{}.json'.format(lang)
-			target_path = os.path.join(target_path_prefix, tf)
-			#print(source_path)
-			#print(target_path)
-			os.rename(source_path, target_path)
+			#get all files in this subdirectory
+			source_files = [f for f in os.listdir(source_path_prefix2) if os.path.isfile(os.path.join(source_path_prefix2, f))]
+
+			#for every file in shard directory...
+			for sf in source_files:
+				#parse information
+				lang, _ = sf.split('.')
+
+				#make target directory if it doesn't exist
+				target_path_prefix = os.path.join(TARGET_DIR, sub_dir, shard_dir)
+				pathlib.Path(target_path_prefix).mkdir(parents=True, exist_ok=True)
+
+				#TODO move file to target directory
+				source_path = os.path.join(source_path_prefix2, sf)
+				tf = '{}.jsonl'.format(lang)
+				target_path = os.path.join(target_path_prefix, tf)
+				#print(source_path)
+				#print(target_path)
+				os.rename(source_path, target_path)
 
 if __name__ == "__main__":
 	main()

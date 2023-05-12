@@ -3,13 +3,17 @@ from dataclasses import dataclass
 # SLURM variables
 DEFAULT_SLURM_ACCOUNT="zlab"
 DEFAULT_SLURM_CONSTRAINT="[rtx6k|a40]"
-DEFAULT_SLURM_PARTITION="gpu-a40"
+DEFAULT_SLURM_PARTITION="gpu-rtx6k"
 
 # path to data directory
 DATA_DIR="/gscratch/zlab/blvns/xl-btm/data/"
 
 # where models will be saved (we will add them under a folder called `opt_ft` in this directory)
 SERIALIZATION_DIR="/gscratch/zlab/blvns/xl-btm/experiments/"
+
+# where clusterers and clusters will be saved
+KMEANS_DIR = f"/gscratch/zlab/blvns/xl-btm/clusterers"
+CLUSTERS_DIR = f"/gscratch/zlab/blvns/xl-btm/clusters"
 
 # path to vocabulary (gpt2-merges.txt and gpt2-encoder.json)
 #DEBUGGING -- shouldn't be used but will break if used to init a tokenizer with xglm

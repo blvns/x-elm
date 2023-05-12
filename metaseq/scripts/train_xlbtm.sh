@@ -120,11 +120,12 @@ python -m metaseq.fb_sweep.ft_stream \
     $CLUSTER_TAG_PHRASE \
     $CLUSTER_TOKEN_PHRASE \
     --fair \
-    --max-valid-steps 100 \
+    --max-valid-steps 200 \
     $LOCAL_PHRASE \
     $JOBARRAY_PHRASE \
     --script ${PATH_TO_CBTM}/metaseq_cli/train.py \
     --constraint $CONSTRAINT \
     --subset $SUBSET\
     --time $JOB_TIME\
-    --sample-alpha $SAMPLE_ALPHA
+    --sample-alpha $SAMPLE_ALPHA \
+    --cpus-per-task 4 
