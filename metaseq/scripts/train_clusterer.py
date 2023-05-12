@@ -280,7 +280,7 @@ def train_vectorizer(file, path_to_vectorizer):
     print([path_to_vectorizer])
     
     #Terra: using spacy stopwords for multilingual clustering
-    stop_words = load_stopwords()
+    stop_words = load_stopwords()+['#NUMBER']
 
     model = Pipeline([('tfidf', NumberNormalizingVectorizer(stop_words=stop_words, max_features=MAX_FEATS)),
                       ('svd', TruncatedSVD(n_components=100)),
