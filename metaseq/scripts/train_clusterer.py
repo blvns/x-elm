@@ -52,7 +52,7 @@ def load_stopwords():
     STOP_WORDS.extend(ja_stop)
     from spacy.lang.ko import stop_words as ko_stop
     STOP_WORDS.extend(ko_stop)
-    STOP_WORDS = list(set(STOP_WORDS)
+    STOP_WORDS = list(set(STOP_WORDS))
     return STOP_WORDS
 
 class ShardedIterator(IterableDataset):
