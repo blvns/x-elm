@@ -21,39 +21,39 @@ from kmeans_pytorch import KMeans as BalancedKMeans
 
 def load_stopwords():
     #import all stop words from spacy -- no Swahili :(
-    STOP_WORDS = []
+    sw = []
     from spacy.lang.en import stop_words as en_stop
-    STOP_WORDS.extend(en_stop)
+    sw.extend(en_stop.STOP_WORDS)
     from spacy.lang.fr import stop_words as fr_stop
-    STOP_WORDS.extend(fr_stop)
+    sw.extend(fr_stop.STOP_WORDS)
     from spacy.lang.es import stop_words as es_stop
-    STOP_WORDS.extend(es_stop)
+    sw.extend(es_stop.STOP_WORDS)
     from spacy.lang.de import stop_words as de_stop
-    STOP_WORDS.extend(de_stop)
+    sw.extend(de_stop.STOP_WORDS)
     from spacy.lang.el import stop_words as el_stop
-    STOP_WORDS.extend(el_stop)
+    sw.extend(el_stop.STOP_WORDS)
     from spacy.lang.bg import stop_words as bg_stop
-    STOP_WORDS.extend(bg_stop)
+    sw.extend(bg_stop.STOP_WORDS)
     from spacy.lang.ru import stop_words as ru_stop
-    STOP_WORDS.extend(ru_stop)
+    sw.extend(ru_stop.STOP_WORDS)
     from spacy.lang.tr import stop_words as tr_stop
-    STOP_WORDS.extend(tr_stop)
+    sw.extend(tr_stop.STOP_WORDS)
     from spacy.lang.ar import stop_words as ar_stop
-    STOP_WORDS.extend(ar_stop)
+    sw.extend(ar_stop.STOP_WORDS)
     from spacy.lang.vi import stop_words as vi_stop
-    STOP_WORDS.extend(vi_stop)
+    sw.extend(vi_stop.STOP_WORDS)
     from spacy.lang.zh import stop_words as zh_stop
-    STOP_WORDS.extend(zh_stop)
+    sw.extend(zh_stop.STOP_WORDS)
     from spacy.lang.hi import stop_words as hi_stop
-    STOP_WORDS.extend(hi_stop)
+    sw.extend(hi_stop.STOP_WORDS)
     from spacy.lang.ur import stop_words as ur_stop
-    STOP_WORDS.extend(ur_stop)
+    sw.extend(ur_stop.STOP_WORDS)
     from spacy.lang.ja import stop_words as ja_stop
-    STOP_WORDS.extend(ja_stop)
+    sw.extend(ja_stop.STOP_WORDS)
     from spacy.lang.ko import stop_words as ko_stop
-    STOP_WORDS.extend(ko_stop)
-    STOP_WORDS = list(set(STOP_WORDS))
-    return STOP_WORDS
+    sw.extend(ko_stop.STOP_WORDS)
+    sw = list(set(sw))
+    return sw
 
 class ShardedIterator(IterableDataset):
     """A sharded wrapper around an iterable, padded to length.
