@@ -237,8 +237,9 @@ class NumberNormalizingVectorizer(TfidfVectorizer):
 
 
 def train_vectorizer(file, path_to_vectorizer):
-    print(path_to_vectorizer)
+    print([path_to_vectorizer])
     path_to_vectorizer=str(path_to_vectorizer)
+    print([path_to_vectorizer])
     
     #Terra: not filtering stopwords for multilingual clustering
     stop_words = [] #list(text.ENGLISH_STOP_WORDS.union(["#NUMBER"]))
@@ -248,18 +249,23 @@ def train_vectorizer(file, path_to_vectorizer):
                       ('normalizer', Normalizer(copy=False))])
 
     texts = get_texts(file)
+    print('loaded text')
     vecs = model.fit_transform(tqdm(texts.text))
+    print('trained vectorizer')
     
     with open(path_to_vectorizer,  'wb+') as f:
         _ = pickle.dump(model, f)
         print('Saved tfidf to {}'.format(path_to_vectorizer))
 
+    print('returning vectorizer')
     return model, vecs
 
 
 def train_kmeans(vecs, n_clusters, path_to_kmeans, balanced=False):
-    print(path_to_kmeans)
+    print([path_to_kmeans])
     path_to_kmeans=str(path_to_kmeans)
+    print([path_to_kmeans])
+    
     if torch.cuda.is_available():
         device = torch.device('cuda')
     else:
@@ -267,12 +273,17 @@ def train_kmeans(vecs, n_clusters, path_to_kmeans, balanced=False):
     kmeans = BalancedKMeans(n_clusters=n_clusters, device=device, balanced=balanced)
 
     batches = np.array_split(vecs, vecs.shape[0] // 50000, axis=0)
-
+    
+    print('Start trainig kmeans...')
     for i, batch in tqdm(enumerate(batches)):
         kmeans.fit(torch.from_numpy(batch), iter_limit=20, online=True, iter_k=i)
+    print('Finished training kmeans!')
+    
     with open(path_to_kmeans,  'wb+') as f:
         _ = pickle.dump(kmeans, f)
         print('Saved kmeans to {}'.format(path_to_kmeans))
+        
+    print('returning kmeans')
     return kmeans
 
 
