@@ -20,7 +20,7 @@ from typing import Dict
 from kmeans_pytorch import KMeans as BalancedKMeans
 
 #set maximum number of tf-idf features for OOM errors
-MAX_FEATS = 250000
+MAX_FEATS = 500000
 
 def load_stopwords():
     #import all stop words from spacy -- no Swahili :(
