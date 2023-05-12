@@ -19,6 +19,9 @@ from tqdm.auto import tqdm
 from typing import Dict
 from kmeans_pytorch import KMeans as BalancedKMeans
 
+#set maximum number of tf-idf features for OOM errors
+MAX_FEATS = 250000
+
 def load_stopwords():
     #import all stop words from spacy -- no Swahili :(
     sw = []
@@ -279,7 +282,7 @@ def train_vectorizer(file, path_to_vectorizer):
     #Terra: using spacy stopwords for multilingual clustering
     stop_words = load_stopwords()
 
-    model = Pipeline([('tfidf', NumberNormalizingVectorizer(stop_words=stop_words)),
+    model = Pipeline([('tfidf', NumberNormalizingVectorizer(stop_words=stop_words, max_features=MAX_FEATS)),
                       ('svd', TruncatedSVD(n_components=100)),
                       ('normalizer', Normalizer(copy=False))])
 
