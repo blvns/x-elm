@@ -51,7 +51,7 @@ def main():
 		#for every shard...
 		for sd in tqdm(shard_dirs):
 			shard_path_prefix = os.path.join(path_prefix, sd)
-			data_files = [f for f in os.listdir(shard_path_prefix) if os.path.isfile(os.path.join(shard_path_prefix, f))]
+			data_files = [f for f in os.listdir(shard_path_prefix) if os.path.isfile(os.path.join(shard_path_prefix, f)) and f.endswith('jsonl')]
 
 			timeout=99999
 			results_arr = Parallel(n_jobs=4, timeout=timeout)(delayed(_process_file)(d, shard_path_prefix) for d in data_files)
