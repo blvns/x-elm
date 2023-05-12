@@ -19,6 +19,39 @@ from tqdm.auto import tqdm
 from typing import Dict
 from kmeans_pytorch import KMeans as BalancedKMeans
 
+#import all stop words from spacy -- no Swahili :(
+STOP_WORDS = []
+from spacy.lang.en import stop_words as en_stop
+STOP_WORDS.extend(en_stop)
+from spacy.lang.fr import stop_words as fr_stop
+STOP_WORDS.extend(fr_stop)
+from spacy.lang.es import stop_words as es_stop
+STOP_WORDS.extend(es_stop)
+from spacy.lang.de import stop_words as de_stop
+STOP_WORDS.extend(de_stop)
+from spacy.lang.el import stop_words as el_stop
+STOP_WORDS.extend(el_stop)
+from spacy.lang.bg import stop_words as bg_stop
+STOP_WORDS.extend(bg_stop)
+from spacy.lang.ru import stop_words as ru_stop
+STOP_WORDS.extend(ru_stop)
+from spacy.lang.tr import stop_words as tr_stop
+STOP_WORDS.extend(tr_stop)
+from spacy.lang.ar import stop_words as ar_stop
+STOP_WORDS.extend(ar_stop)
+from spacy.lang.vi import stop_words as vi_stop
+STOP_WORDS.extend(vi_stop)
+from spacy.lang.zh import stop_words as zh_stop
+STOP_WORDS.extend(zh_stop)
+from spacy.lang.hi import stop_words as hi_stop
+STOP_WORDS.extend(hi_stop)
+from spacy.lang.ur import stop_words as ur_stop
+STOP_WORDS.extend(ur_stop)
+from spacy.lang.ja import stop_words as ja_stop
+STOP_WORDS.extend(ja_stop)
+from spacy.lang.ko import stop_words as ko_stop
+STOP_WORDS.extend(ko_stop)
+STOP_WORDS = list(set(STOP_WORDS)
 
 class ShardedIterator(IterableDataset):
     """A sharded wrapper around an iterable, padded to length.
@@ -241,8 +274,8 @@ def train_vectorizer(file, path_to_vectorizer):
     path_to_vectorizer=str(path_to_vectorizer)
     print([path_to_vectorizer])
     
-    #Terra: not filtering stopwords for multilingual clustering
-    stop_words = [] #list(text.ENGLISH_STOP_WORDS.union(["#NUMBER"]))
+    #Terra: using spacy stopwords for multilingual clustering
+    stop_words = STOP_WORDS
 
     model = Pipeline([('tfidf', NumberNormalizingVectorizer(stop_words=stop_words)),
                       ('svd', TruncatedSVD(n_components=100)),
