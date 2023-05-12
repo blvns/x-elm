@@ -249,6 +249,7 @@ def train_vectorizer(file, path_to_vectorizer):
     
     with open(path_to_vectorizer,  'wb+') as f:
         _ = pickle.dump(model, f)
+        print('Saved tfidf to {}'.format(path_to_vectorizer))
 
     return model, vecs
 
@@ -266,6 +267,7 @@ def train_kmeans(vecs, n_clusters, path_to_kmeans, balanced=False):
         kmeans.fit(torch.from_numpy(batch), iter_limit=20, online=True, iter_k=i)
     with open(path_to_kmeans,  'wb+') as f:
         _ = pickle.dump(kmeans, f)
+        print('Saved kmeans to {}'.format(path_to_kmeans))
     return kmeans
 
 
