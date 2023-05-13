@@ -141,6 +141,7 @@ if __name__ == '__main__':
     num_shards = len(os.listdir(os.path.join(cmd_args.data_dir,cmd_args.split)))
     cur_shard_strs = [get_shard_str(i, cmd_args.data_dir, cmd_args.split) for i in range(num_shards)]
     #cur_shard_strs = ["00000"]
+    print(cur_shard_strs)
     
     files = {cur_shard_str: list(map(lambda x: os.path.join(cmd_args.data_dir, cmd_args.split, cur_shard_str) + "/" +  x,
                 os.listdir(os.path.join(cmd_args.data_dir, cmd_args.split, cur_shard_str)))) for cur_shard_str in cur_shard_strs}
