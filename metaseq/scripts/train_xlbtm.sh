@@ -104,7 +104,8 @@ python -m metaseq.fb_sweep.ft_stream \
     --max-update $MAX_STEPS \
     --no-tensorboard \
     --no-wandb \
-    --interval 500 \
+    --interval 100 \
+    --validate-at-beginning \
     --save-interval-updates $SAVE_INTERVAL_UPDATES \
     --keep-interval-updates 2 \
     --bs $BATCH_SIZE \
