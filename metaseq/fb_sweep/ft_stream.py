@@ -99,8 +99,8 @@ def get_grid(args):
         hyperparam("--validate-interval-updates", args.interval),
     ]
     # hyperparam("--no-save-optimizer-state"),
-    if args.validate_at_beginning:
-        grid += [hyperparam("--validate-at-beginning")]
+    #if args.validate_at_beginning:
+    #    grid += [hyperparam("--validate-at-beginning")]
     if args.no_save:
         H("--no-save")
     else:
