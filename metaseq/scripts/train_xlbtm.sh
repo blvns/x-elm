@@ -82,10 +82,10 @@ else
     LABEL_LOSS_PHRASE="";
 fi;
 
-SAVE_INTERVAL_UPDATES=200;
-if [ $UPDATE_FREQ != "1" ]; then
-    SAVE_INTERVAL_UPDATES=`expr $SAVE_INTERVAL_UPDATES / $UPDATE_FREQ `;
-fi;
+SAVE_INTERVAL_UPDATES=100;
+#if [ $UPDATE_FREQ != "1" ]; then
+#    SAVE_INTERVAL_UPDATES=`expr $SAVE_INTERVAL_UPDATES / $UPDATE_FREQ `;
+#fi;
 
 
 python -m metaseq.fb_sweep.ft_stream \
