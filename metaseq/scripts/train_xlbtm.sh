@@ -23,7 +23,7 @@ CONSTRAINT=${22}
 MAX_STEPS=${23}
 ADD_CLUSTER_TOKEN=${24}
 JOB_TIME=${25}
-SAMPLE_ALPHA=${26}
+RESTORE_FILE=${26}
 
 if [ $TRAIN_CLUSTER == "None" ]; then
     TRAIN_CLUSTER="";
@@ -127,5 +127,5 @@ python -m metaseq.fb_sweep.ft_stream \
     --constraint $CONSTRAINT \
     --subset $SUBSET\
     --time $JOB_TIME\
-    --sample-alpha $SAMPLE_ALPHA \
+    --restore-file $RESTORE_FILE \
     --cpus-per-task 4 
