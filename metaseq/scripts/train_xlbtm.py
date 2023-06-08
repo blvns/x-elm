@@ -46,7 +46,7 @@ if __name__ == '__main__':
     parser.add_argument('--slurm-account', type=str, default=DEFAULT_SLURM_ACCOUNT)
     parser.add_argument('--slurm-constraint',  type=str, default=DEFAULT_SLURM_CONSTRAINT)
     parser.add_argument('--time', type=str, default='72:00:00')
-    parser.add_argument('--restore-file', type=str, default='none')
+    parser.add_argument('--restore-file', type=str, default='')
 
     args = parser.parse_args()
 
