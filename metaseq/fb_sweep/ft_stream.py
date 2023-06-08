@@ -75,6 +75,7 @@ def get_grid(args):
 
     size = MODEL_SIZES[args.model_size]
     
+    if args.restore_file == '': args.restore_file = None
     if args.finetune_from_model is None and args.restore_file is None:
         args.finetune_from_model = PRETRAIN_MODEL_LOCATIONS[cluster_env][
             args.model_size
