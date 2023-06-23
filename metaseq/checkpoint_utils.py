@@ -499,6 +499,8 @@ def load_model_ensemble_and_task(
             # "cfg.common.model_parallel_size == 1" checks if model parallel is
             # enabled at load time. If it's not, fall back to non-MP
             # transformer code path.
+
+            cfg.common.model_parallel_size = 0 #Terra DEBUGGING Megatron issues
             if (
                 getattr(cfg.model, "arch", None) == "transformer_lm_megatron"
                 and cfg.common.model_parallel_size == 1
