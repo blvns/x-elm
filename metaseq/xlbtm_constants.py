@@ -5,6 +5,7 @@ DEFAULT_SLURM_ACCOUNT="zlab"
 DEFAULT_SLURM_CONSTRAINT="[rtx6k|a40|a100]"
 #DEFAULT_SLURM_PARTITION="gpu-rtx6k"
 DEFAULT_SLURM_PARTITION="ckpt"
+#DEFAULT_SLURM_PARTITION="gpu-a40"
 
 # path to data directory
 DATA_DIR="/gscratch/zlab/blvns/xl-btm/data/"
