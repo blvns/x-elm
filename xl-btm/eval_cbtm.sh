@@ -19,7 +19,7 @@ echo $CONSOLIDATED_MODEL_PATHS
 
 python -m metaseq_cli.eval_cbtm \
     --data-dir ${DATA_DIR}/${DATASET} \
-    --data-subset valid/C4_small \
+    --data-subset valid \
     --path-to-clusterer ${KMEANS_DIR}/${DATASET}/${NUM_CLUSTERS}/ \
     --model-paths $CONSOLIDATED_MODEL_PATHS \
     --job-dir ${EVAL_DIR} \
