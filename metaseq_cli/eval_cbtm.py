@@ -70,6 +70,9 @@ def validate_btm(itr, cfg, models, scorer, precomputed_prior=None, topk=-1, targ
     else:
         priors = np.array([1/torch.distributed.get_world_size()] * torch.distributed.get_world_size())
 
+    print(scorer)
+    quit()
+    
     ppls_all = []
     pbar = tqdm(enumerate(itr))
     for k, sample in pbar:
