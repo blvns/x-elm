@@ -17,10 +17,10 @@ for folder in "${MODEL_FOLDERS[@]}"; do
         #ORIGINAL_MODEL_PATHS+="${folder}/checkpoint_last.pt ";
         C="${folder}/consolidated";
         O="${folder}/checkpoint_last.pt";
-        python -m metaseq.scripts.consolidate_fsdp_shards {1} --save-prefix {2} --new-arch-name transformer_lm_gpt $C $O
+        python -m metaseq.scripts.consolidate_fsdp_shards $O --save-prefix $C --new-arch-name transformer_lm_gpt
     fi;
 done
 
 echo "Consolidated ${count} models"
 
-#parallel --link --ungroup --jobs 10 python -m metaseq.scripts.consolidate_fsdp_shards $O --save-prefix $C --new-arch-name transformer_lm_gpt
+#parallel --link --ungroup --jobs 10 python -m metaseq.scripts.consolidate_fsdp_shards {1} --save-prefix {2} --new-arch-name transformer_lm_gpt ::: X ::: Y
