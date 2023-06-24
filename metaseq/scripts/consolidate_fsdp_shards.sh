@@ -13,13 +13,14 @@ for folder in "${MODEL_FOLDERS[@]}"; do
     # check if there are any consolidated.pt files in the model folder 
     if ! test -f "${folder}/consolidated.pt"; then
         ((count++))
-        CONSOLIDATED_MODEL_PREFIXES+="${folder}/consolidated ";
-        ORIGINAL_MODEL_PATHS+="${folder}/checkpoint_last.pt ";
+        #CONSOLIDATED_MODEL_PREFIXES+="${folder}/consolidated ";
+        #ORIGINAL_MODEL_PATHS+="${folder}/checkpoint_last.pt ";
+        C="${folder}/consolidated";
+        O="${folder}/checkpoint_last.pt";
+        python -m metaseq.scripts.consolidate_fsdp_shards {1} --save-prefix {2} --new-arch-name transformer_lm_gpt $C $O
     fi;
 done
 
-echo "Consolidating ${count} models"
+echo "Consolidated ${count} models"
 
-#DEBUGGING
-echo "parallel --link --ungroup --jobs 10 python -m metaseq.scripts.consolidate_fsdp_shards {1} --save-prefix {2} --new-arch-name transformer_lm_gpt ::: $ORIGINAL_MODEL_PATHS ::: $CONSOLIDATED_MODEL_PREFIXES"
 #parallel --link --ungroup --jobs 10 python -m metaseq.scripts.consolidate_fsdp_shards {1} --save-prefix {2} --new-arch-name transformer_lm_gpt ::: $ORIGINAL_MODEL_PATHS ::: $CONSOLIDATED_MODEL_PREFIXES
