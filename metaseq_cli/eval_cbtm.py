@@ -169,8 +169,6 @@ def main(cfg: DictConfig, cur_shard_str, output_dir, path_to_clusterer, random_c
     if average:
         load_models = utils.split_paths(cfg.common_eval.path)
     else:
-        #Terra need this for error with torch.distributed.getrank
-        torch.distributed.init_process_group(backend="nccl")
         load_models = [utils.split_paths(cfg.common_eval.path)[torch.distributed.get_rank()]]
     models, _, task = checkpoint_utils.load_model_ensemble_and_task(
         load_models,
