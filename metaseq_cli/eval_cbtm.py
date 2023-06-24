@@ -525,12 +525,12 @@ if __name__ == "__main__":
         random_ports = np.random.randint(1024, 56000, len(cmd_args.data_subset))
 
     if cmd_args.submitit:
-        executor = submitit.AutoExecutor(folder=cmd_args.job_dir, slurm_max_num_timeout=200)
+        executor = submitit.AutoExecutor(folder=cmd_args.job_dir, slurm_max_num_timeout=500)
 
         num_gpus_per_node = 8 if len(cmd_args.model_paths) > 8 else len(cmd_args.model_paths)
         num_tasks_per_node = 8 if len(cmd_args.model_paths) > 8 else len(cmd_args.model_paths)
         nodes = len(cmd_args.model_paths) // 8 if len(cmd_args.model_paths) > 8 else 1
-        timeout_min = 30
+        timeout_min = 200
 
         # partition = 'learnlab,devlab,scavenge' if cmd_args.partition in [None, "None"] else cmd_args.partition
         kwargs = {}
