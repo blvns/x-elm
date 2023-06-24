@@ -24,6 +24,6 @@ python -m metaseq_cli.eval_cbtm \
     --model-paths $CONSOLIDATED_MODEL_PATHS \
     --job-dir ${EVAL_DIR} \
     --temperature 0.1 \
-    --max-valid-steps 200 \
+    --max-valid-steps 5000 \
     --ensemble-type clustering \
 #    --submitit
