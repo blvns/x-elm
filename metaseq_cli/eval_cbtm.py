@@ -525,7 +525,7 @@ if __name__ == "__main__":
         random_ports = np.random.randint(1024, 56000, len(cmd_args.data_subset))
 
     if cmd_args.submitit:
-        executor = submitit.AutoExecutor(folder=cmd_args.job_dir, slurm_max_num_timeout=30)
+        executor = submitit.AutoExecutor(folder=cmd_args.job_dir, slurm_max_num_timeout=120)
 
         num_gpus_per_node = 8 if len(cmd_args.model_paths) > 8 else len(cmd_args.model_paths)
         num_tasks_per_node = 8 if len(cmd_args.model_paths) > 8 else len(cmd_args.model_paths)
