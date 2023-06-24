@@ -20,4 +20,6 @@ done
 
 echo "Consolidating ${count} models"
 
-parallel --link --ungroup --jobs 10 python -m metaseq.scripts.consolidate_fsdp_shards {1} --save-prefix {2} --new-arch-name transformer_lm_gpt ::: $ORIGINAL_MODEL_PATHS ::: $CONSOLIDATED_MODEL_PREFIXES
+#DEBUGGING
+echo "parallel --link --ungroup --jobs 10 python -m metaseq.scripts.consolidate_fsdp_shards {1} --save-prefix {2} --new-arch-name transformer_lm_gpt ::: $ORIGINAL_MODEL_PATHS ::: $CONSOLIDATED_MODEL_PREFIXES"
+#parallel --link --ungroup --jobs 10 python -m metaseq.scripts.consolidate_fsdp_shards {1} --save-prefix {2} --new-arch-name transformer_lm_gpt ::: $ORIGINAL_MODEL_PATHS ::: $CONSOLIDATED_MODEL_PREFIXES
