@@ -2,9 +2,9 @@ export NUM_CLUSTERS=$2;
 # we want as many GPUs as we have clusters
 export NUM_GPUS=${NUM_CLUSTERS};
 export DATASET=mc4;
-export EVAL_DIR=${SERIALIZATION_DIR}/${NUM_CLUSTERS}_clusters/eval_$1
+export EVAL_DIR=${SERIALIZATION_DIR}/${NUM_CLUSTERS}_clusters/eval_$1;
 #this was missing (might need to be num clusters? idk)
-export SLURM_NTASKS=1
+export SLURM_NTASKS=${NUM_CLUSTERS};
 
 mkdir -p ${EVAL_DIR};
 
