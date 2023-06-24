@@ -69,9 +69,6 @@ def validate_btm(itr, cfg, models, scorer, precomputed_prior=None, topk=-1, targ
         priors = np.array(precomputed_prior)
     else:
         priors = np.array([1/torch.distributed.get_world_size()] * torch.distributed.get_world_size())
-
-    print(scorer)
-    quit()
     
     ppls_all = []
     pbar = tqdm(enumerate(itr))
@@ -201,7 +198,9 @@ def main(cfg: DictConfig, cur_shard_str, output_dir, path_to_clusterer, random_c
     eval_split = cfg.dataset.valid_subset
 
     scorer = SequenceScorerBTM(task.target_dictionary,
-                                tokenizer=task.tokenizer,
+                                #tokenizer=task.tokenizer,
+                                #exposing the underlying Tokenizers object for eval
+                                tokenizer.task.tokenizer._tokenizer, 
                                 temperature=temperature,
                                 ensemble_type=ensemble_type,
                                 num_clusters=torch.distributed.get_world_size() if not average else len(models),
