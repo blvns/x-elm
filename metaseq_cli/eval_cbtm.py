@@ -200,7 +200,7 @@ def main(cfg: DictConfig, cur_shard_str, output_dir, path_to_clusterer, random_c
     scorer = SequenceScorerBTM(task.target_dictionary,
                                 #tokenizer=task.tokenizer,
                                 #exposing the underlying Tokenizers object for eval
-                                tokenizer.task.tokenizer._tokenizer, 
+                                tokenizer=task.tokenizer._tokenizer, 
                                 temperature=temperature,
                                 ensemble_type=ensemble_type,
                                 num_clusters=torch.distributed.get_world_size() if not average else len(models),
