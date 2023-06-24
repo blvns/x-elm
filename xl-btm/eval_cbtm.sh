@@ -4,7 +4,7 @@ export NUM_GPUS=${NUM_CLUSTERS};
 export DATASET=mc4;
 export EVAL_DIR=${SERIALIZATION_DIR}/${NUM_CLUSTERS}_clusters/eval_$1;
 #this was missing (might need to be num clusters? idk)
-export SLURM_NTASKS=${NUM_CLUSTERS};
+export SLURM_NTASKS=1;
 
 mkdir -p ${EVAL_DIR};
 
