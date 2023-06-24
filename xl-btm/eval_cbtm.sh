@@ -26,4 +26,4 @@ python -m metaseq_cli.eval_cbtm \
     --temperature 0.1 \
     --max-valid-steps 10000 \
     --ensemble-type clustering \
-#    --submitit
+    --submitit
