@@ -1,4 +1,5 @@
 export NUM_CLUSTERS=$2;
+export VALID_LANG=$3
 # we want as many GPUs as we have clusters
 export NUM_GPUS=${NUM_CLUSTERS};
 export DATASET=mc4;
@@ -9,7 +10,7 @@ export SLURM_NTASKS=1;
 mkdir -p ${EVAL_DIR};
 
 # get model checkpoints
-CONSOLIDATED_MODEL_PATHS=$3;
+CONSOLIDATED_MODEL_PATHS=$4;
 #CONSOLIDATED_MODEL_PATHS=`echo "${CONSOLIDATED_MODEL_PATHS}" | tr ',' ' '`
 echo $CONSOLIDATED_MODEL_PATHS
 
@@ -19,11 +20,11 @@ echo $CONSOLIDATED_MODEL_PATHS
 
 python -m metaseq_cli.eval_cbtm \
     --data-dir ${DATA_DIR}/${DATASET} \
-    --data-subset valid \
+    --data-subset valid_${VALID_LANG} \
     --path-to-clusterer ${KMEANS_DIR}/${DATASET}/${NUM_CLUSTERS}/ \
     --model-paths $CONSOLIDATED_MODEL_PATHS \
     --job-dir ${EVAL_DIR} \
     --temperature 0.1 \
-    --max-valid-steps 10000 \
+    --max-valid-steps 5000 \
     --ensemble-type clustering \
     --submitit
