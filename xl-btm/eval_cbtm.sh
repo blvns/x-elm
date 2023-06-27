@@ -1,5 +1,5 @@
 export NUM_CLUSTERS=$2;
-export VALID_LANG=$3
+export VALID_LANG=$4
 # we want as many GPUs as we have clusters
 export NUM_GPUS=${NUM_CLUSTERS};
 export DATASET=mc4;
@@ -10,7 +10,7 @@ export SLURM_NTASKS=1;
 mkdir -p ${EVAL_DIR};
 
 # get model checkpoints
-CONSOLIDATED_MODEL_PATHS=$4;
+CONSOLIDATED_MODEL_PATHS=$3;
 #CONSOLIDATED_MODEL_PATHS=`echo "${CONSOLIDATED_MODEL_PATHS}" | tr ',' ' '`
 echo $CONSOLIDATED_MODEL_PATHS
 
