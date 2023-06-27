@@ -16,8 +16,7 @@ for folder in "${MODEL_FOLDERS[@]}"; do
         #CONSOLIDATED_MODEL_PREFIXES+="${folder}/consolidated ";
         #ORIGINAL_MODEL_PATHS+="${folder}/checkpoint_last.pt ";
         C="${folder}/consolidated";
-        #O="${folder}/checkpoint_last.pt";
-        O="${folder}/xglm-model.pt";
+        O="${folder}/checkpoint_last.pt";
         python -m metaseq.scripts.consolidate_fsdp_shards $O --save-prefix $C --new-arch-name transformer_lm_gpt
     fi;
 done
