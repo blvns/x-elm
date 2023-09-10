@@ -15,7 +15,8 @@ echo $CONSOLIDATED_MODEL_PATHS
 #JOINED_MODEL_PATHS=$(join ${CONSOLIDATED_MODEL_PATHS[@]})
 #echo $JOINED_MODEL_PATHS
 
-declare -a langs=("el" "en" "es" "fr" "hi" "ja" "ko" "ru" "sw" "tr" "ur" "vi" "zh")
+#("ar" "bg" "de" "el" "en" "es" "fr" "hi" "ja" "ko" "ru" "sw" "tr" "ur" "vi" "zh")
+declare -a langs=("fr") # "es"
 
 for lang in "${langs[@]}"
 do
@@ -30,8 +31,8 @@ do
     --temperature 0.1 \
     --max-valid-steps 5000 \
     --ensemble-type clustering \
-    --topk 1 \
-    --submitit
+    #--submitit \
+    #--topk 1 
    
 done
 

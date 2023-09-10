@@ -87,7 +87,7 @@ SAVE_INTERVAL_UPDATES=100;
 #    SAVE_INTERVAL_UPDATES=`expr $SAVE_INTERVAL_UPDATES / $UPDATE_FREQ `;
 #fi;
 
-
+#removed --exclusive?
 python -m metaseq.fb_sweep.ft_stream \
     -n $NUM_NODES \
     -g $NUM_GPUS \
@@ -114,7 +114,6 @@ python -m metaseq.fb_sweep.ft_stream \
     $LABEL_LOSS_PHRASE \
     --partition $PARTITION \
     --account $ACCOUNT \
-    --exclusive \
     --resume-failed \
     $RANDOM_CLUSTERS_PHRASE \
     $CLUSTER_TAG_PHRASE \
@@ -125,7 +124,7 @@ python -m metaseq.fb_sweep.ft_stream \
     $JOBARRAY_PHRASE \
     --script ${PATH_TO_CBTM}/metaseq_cli/train.py \
     --constraint $CONSTRAINT \
-    --subset $SUBSET\
-    --time $JOB_TIME\
+    --subset $SUBSET \
+    --time $JOB_TIME \
     --restore-file $RESTORE_FILE \
-    --cpus-per-task 4 
+    --cpus-per-task 4 --mem 64G

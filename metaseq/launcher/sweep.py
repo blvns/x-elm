@@ -265,11 +265,11 @@ def _modify_arg_defaults_based_on_env(env, args):
             str(datetime.date.today()),
         )
 
-    default_cpu_per_task = None
-    if env == ComputeEnvs.AZURE or env == ComputeEnvs.AWS:
-        default_cpu_per_task = 12
-    elif env == ComputeEnvs.FAIR:
-        default_cpu_per_task = 10
+    default_cpu_per_task = None 
+    #if env == ComputeEnvs.AZURE or env == ComputeEnvs.AWS:
+    #    default_cpu_per_task = 12
+    #elif env == ComputeEnvs.FAIR:
+    #    default_cpu_per_task = 10
 
     default_cpu_bind = "none"
     if env == ComputeEnvs.AZURE:

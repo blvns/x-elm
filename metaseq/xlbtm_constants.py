@@ -3,8 +3,8 @@ from dataclasses import dataclass
 # SLURM variables
 DEFAULT_SLURM_ACCOUNT="zlab"
 DEFAULT_SLURM_CONSTRAINT="[rtx6k|a40|a100]"
-#DEFAULT_SLURM_PARTITION="gpu-rtx6k"
-DEFAULT_SLURM_PARTITION="ckpt"
+DEFAULT_SLURM_PARTITION="gpu-rtx6k"
+#DEFAULT_SLURM_PARTITION="ckpt"
 #DEFAULT_SLURM_PARTITION="gpu-a40"
 
 # path to data directory
@@ -26,6 +26,7 @@ VOCAB_PATH = "."
 # path to pretrained models
 #PRETRAINED_MODELS_DIR="/gscratch/zlab/blvns/xlbtm/pretrained_models/opt/"
 PRETRAINED_MODELS_DIR="/gscratch/zlab/blvns/xl-btm/pretrained_models/xglm/"
+#PRETRAINED_MODELS_DIR="/gscratch/zlab/blvns/xl-btm/experiments/4_clusters/"
 
 # path to 1.3B parameter OPT checkpoint
 #PATH_TO_1_3B_MODEL="/gscratch/zlab/blvns/xlbtm/pretrained_models/opt/1.3b/checkpoint_last.pt"
@@ -34,6 +35,7 @@ PRETRAINED_MODELS_DIR="/gscratch/zlab/blvns/xl-btm/pretrained_models/xglm/"
 
 # path to 1.7B parameter XGLM checkpoint
 PATH_TO_1_7B_MODEL="/gscratch/zlab/blvns/xl-btm/pretrained_models/xglm/1.7b/xglm.pt"
+#PATH_TO_1_7B_MODEL="/gscratch/zlab/blvns/xl-btm/experiments/4_clusters/xlbtm.lang.mu20000.cluster3/checkpoint_last.pt"
 
 # path to xlbtm library
 PATH_TO_CBTM="/gscratch/zlab/blvns/xl-btm/"
