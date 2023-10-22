@@ -71,6 +71,7 @@ def main():
 
 	#for every size of cluster
 	for size_dir in CLUSTER_SIZE_DIRS:
+
 		cluster_dist = {}
 
 		if os.path.isfile("./data/mc4_cluster{}_lang_dists.pkl".format(size_dir)):
@@ -102,12 +103,12 @@ def main():
 				pickle.dump(cluster_dist, f)
 
 		#make into heatmap format
-		y_labels = ['en', 'es', 'bg', 'ru', 'de', 'el', 'hi', 'ur', 'fr', 'ar', 'vi', 'sw', 'ja', 'ko', 'tr', 'zh'] #all langs
+		y_labels = ['en', 'es', 'bg', 'ru', 'de', 'el', 'fr', 'ar', 'hi', 'ur', 'vi', 'sw', 'ja', 'ko', 'tr', 'zh'] #all langs
 		x_labels = [i for i in list(range(0, size_dir))]
 
 		data = []
 
-		print(cluster_dist)
+		#print(cluster_dist)
 
 		for lang in y_labels:
 			lang_data = []
@@ -120,16 +121,48 @@ def main():
 			#normalize lang_data
 			lang_total = sum(lang_data)
 			lang_data = [d/lang_total for d in lang_data]
+
+			#print top 1 cluster for each expert
+			#lang_data = lang_data.index(max(lang_data))
+
 			data.append(lang_data)
 
-		print(data)
+		'''
+		#doing lang assign clusters
+		cluster_dist = {
+			4: {'en': 0, 'es': 0, 'bg': 0, 'ru': 0, 'ja': 1, 'ko': 1, 'tr': 1, 'zh': 1, 'de': 2, 'el': 2, 'fr': 2, 'ar': 2, 'hi': 3, 'ur': 3, 'vi': 3, 'sw': 3},
+			8: {'en': 0, 'es': 0, 'de': 1, 'el': 1, 'ja': 2, 'ko': 2, 'hi': 3, 'ur': 3, 'bg': 4, 'ru': 4, 'fr': 5, 'ar': 5, 'tr': 6, 'zh': 6, 'vi': 7, 'sw': 7},
+			16: {'en': 0, 'fr': 1, 'es': 2, 'de': 3, 'el': 4, 'bg': 5, 'ru': 6, 'tr': 7, 'ar': 8, 'vi': 9, 'zh': 10, 'hi': 11, 'sw': 12, 'ur': 13, 'ja': 14, 'ko': 15},
+		}
+
+		#make into heatmap format
+		y_labels = ['en', 'es', 'bg', 'ru', 'de', 'el', 'fr', 'ar', 'hi', 'ur', 'vi', 'sw', 'ja', 'ko', 'tr', 'zh'] #all langs
+		x_labels = [i for i in list(range(0, size_dir))]
+
+		data = []
+		for lang in y_labels:
+			lang_data = []
+			for cluster_id in x_labels:
+				val = 0
+				if cluster_id == cluster_dist[size_dir][lang]:
+					val = 1
+				lang_data.append(val)
+			data.append(lang_data)
+		'''
+
 		#make a heatmap of auto clusters dists at k=4, 8, 16
-		cmap = sns.color_palette("rocket_r", as_cmap=True)
+		#cmap = sns.color_palette("rocket_r", as_cmap=True)
+		#cmap = sns.light_palette("#9d053b", reverse=False, as_cmap=True) #, input='')
+		cmap = sns.light_palette("#484f77", reverse=False, as_cmap=True) #, input='')
+		
+
 		sns.heatmap(data, xticklabels=x_labels, yticklabels=[l.upper() for l in y_labels], cmap=cmap)
-		plt.xlabel('Clusters')
+		plt.xlabel('K = {}'.format(size_dir))
 		plt.ylabel('Lang')
+		#plt.xticks(rotation=0, fontsize=12)
+		plt.xticks([])
 		plt.tight_layout()
-		plt.savefig('./cluster{}_dist.png'.format(size_dir), dpi=800)
+		plt.savefig('./tfidf_cluster{}_dist.png'.format(size_dir), dpi=800)
 		plt.clf()
 
 if __name__ == "__main__":

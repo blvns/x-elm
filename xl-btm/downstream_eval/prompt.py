@@ -62,29 +62,49 @@ def _create_example(example, task, label):
 
 	return (example_text0, example_text1)
 
-def _fwd(model, input_ids, context_key_values, apply_softmax):
+def _fwd(model, input_ids, context_key_values, gpu_id=0):
 	with torch.no_grad():
-		input_ids = input_ids.to("cuda")
+		input_ids = input_ids.to(torch.device("cuda:{}".format(gpu_id)))
 		output = model(input_ids, past_key_values=context_key_values, use_cache=True, return_dict=True)
 	logits = output['logits'].squeeze()
-	if apply_softmax: logits = F.log_softmax(logits, dim=-1)
 	return logits.to("cpu")
 
-def score(model, tokenizer, input_text, trg_lang, context_key_values, apply_softmax=False):
+def score(models_arr, tokenizer, input_text, trg_lang, context_key_values_arr, alpha=1):
 	scores = []
 
 	#process shared subset first and get model state
 	shared_text = input_text[0][0]
-	example_key_values = _run_context(model, tokenizer, shared_text, history=context_key_values)
+	example_key_values_arr = _run_context(models_arr, tokenizer, shared_text, history=context_key_values_arr)
 
 	#score example with each possible label
 	for _, input_choice in input_text:
 		#tokenize input
 		input_ids = tokenizer(input_choice, return_tensors='pt')['input_ids']
 
-		#pass example through model
-		output = _fwd(model, input_ids[:,:-1], example_key_values, apply_softmax)	
+		outputs = []
+		for i, (model, example_key_values) in enumerate(list(zip(models_arr, example_key_values_arr))): 
+			#pass example through model
+			x = _fwd(model, input_ids[:,:-1], example_key_values, gpu_id=i)	
+			outputs.append(x)
 
+		#handle outputs for ensembling
+		if len(outputs) > 1:
+			#ensemble logits
+			interpol_weights = [alpha, 1-alpha]
+			#print(outputs[0])
+			#input('...')
+			#print(outputs[1])
+			#input('...')
+			output_0 = outputs[0]*interpol_weights[0]
+			output_1 = outputs[1]*interpol_weights[1]
+			output = output_0.add(output_1)
+			#print(output)
+			#quit()
+		else:
+			output = outputs[0]
+
+		#normalize probs
+		output = F.log_softmax(output, dim=-1)
 		#get NLL of sequence from logits (conditioned on label)
 		target = input_ids[:,1:].flatten()
 		nll = F.nll_loss(output, target, reduction='mean')
@@ -92,14 +112,19 @@ def score(model, tokenizer, input_text, trg_lang, context_key_values, apply_soft
 
 	return scores
 
-def _run_context(model, tokenizer, text, history=None):
+def _run_context(models, tokenizer, text, history=None):
+	if not history:
+		history = [None]*len(models)
+
 	#tokenize input
 	input_ids = tokenizer(text, return_tensors='pt')['input_ids']
-	with torch.no_grad():
-		input_ids = input_ids.to("cuda")
-		output = model(input_ids, return_dict=True, use_cache=True, past_key_values=history)
-	output = output['past_key_values']
-	return output
+	outputs = []
+	for i, (model, hist) in enumerate(list(zip(models, history))):
+		with torch.no_grad():
+			input_ids = input_ids.to(torch.device("cuda:{}".format(i)))
+			output = model(input_ids, return_dict=True, use_cache=True, past_key_values=hist)
+		outputs.append(output['past_key_values'])
+	return outputs
 
 def _calculate_acc(scores):
 	acc = [1 if int(y) == probs.index(min(probs)) else 0 for y, probs in scores]
@@ -111,16 +136,18 @@ def load_model(tokenizer_path, model_path):
 	tokenizer = AutoTokenizer.from_pretrained(tokenizer_path)
 
 	#model
-	model = AutoModelForCausalLM.from_pretrained(model_path)
-	model = model.to("cuda")
-	model = model.eval()
+	models = []
+	for i, mpath in enumerate(model_path):
+		model = AutoModelForCausalLM.from_pretrained(mpath)
+		model = model.to(torch.device("cuda:{}".format(i)))
+		model = model.eval()
+		models.append(model)	
 
-	return tokenizer, model
+	return tokenizer, models
 
 def main(args):
 	eval_task = args.task
 	datapath = None
-	apply_softmax=True
 
 	if eval_task == 'xnli':
 		context_split = 'validation'
@@ -131,7 +158,7 @@ def main(args):
 		datapath = './xstorycloze'
 
 	#load model
-	tokenizer, model = load_model('facebook/xglm-1.7B', args.model_path)
+	tokenizer, models = load_model('facebook/xglm-1.7B', args.model_path)
 
 	for eval_lang in args.eval_lang:
 
@@ -151,7 +178,7 @@ def main(args):
 				break
 
 			#skip run if we already have results saved
-			m = args.model_path.split('/')[-1]
+			m = args.model_path[0].split('/')[-1]
 			scores_filepath = '{}.{}.k{}.eval_{}.run{}.pkl'.format(m, eval_task, args.k, eval_lang, run_id)
 			scores_filepath = os.path.join(args.output_dir, scores_filepath)
 			if os.path.isfile(scores_filepath): 
@@ -163,12 +190,12 @@ def main(args):
 				task_acc_by_run.append(acc)
 				continue
 
-			context = None
+			contexts = [None]*len(models)
 			if args.k > 0:
 				#create in-context examples text
 				context = _create_context(eval_task, args.k, context_split, demo_lang, datapath, args.rand_seed, run_id)
 				#cache context values to save on compute
-				context = _run_context(model, tokenizer, context)
+				contexts = _run_context(models, tokenizer, context)
 
 			#for each example -- get weight over all possible labels from all langs
 			scores = []
@@ -181,7 +208,7 @@ def main(args):
 					example_texts = [_create_example(example, eval_task, label=example['sentence_quiz1']), _create_example(example, eval_task, label=example['sentence_quiz2'])]
 					gold_label_idx = example['answer_right_ending']-1 #convert to 0-indexed
 				#run through model + score
-				x = score(model, tokenizer, example_texts, eval_lang, context, apply_softmax=apply_softmax)
+				x = score(models, tokenizer, example_texts, eval_lang, contexts, alpha=args.ensemble_alpha)
 				scores.append((gold_label_idx, x))
 
 			#write out scores to file!
@@ -201,7 +228,6 @@ def main(args):
 		print('{} {} Acc: {:3.2f} ± {:4.3f}'.format(eval_task, eval_lang, mean, std_err))
 
 
-
 if __name__ == "__main__":
 
 	parser = argparse.ArgumentParser()
@@ -214,8 +240,8 @@ if __name__ == "__main__":
 	)
 	parser.add_argument(
 	    "--model_path", type=str,
-	    default="facebook/xglm-1.7B"
-	    #pass in path from filesystem to eval custom models
+	    default=["facebook/xglm-1.7B"], nargs='+'
+	    #pass in path(s) from filesystem to eval custom models
 	)
 	parser.add_argument(
 	    "--eval_lang", required=True, type=str, nargs='+'
@@ -229,6 +255,9 @@ if __name__ == "__main__":
 	)
 	parser.add_argument(
 	    "--output_dir", default='.', type=str,
+	)
+	parser.add_argument(
+	    "--ensemble_alpha", default=0.5, type=float,
 	)
 
 	args = parser.parse_args()
