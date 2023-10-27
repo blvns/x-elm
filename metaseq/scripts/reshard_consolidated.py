@@ -58,13 +58,16 @@ def reshard_unflattened_model_weights(
     logger.info(f"Reshard unflattened model weights into {num_output_shards} shard(s)")
     resharded_weights = [{} for _ in range(num_output_shards)]
 
+    print(shard_metadata)
+    quit() #DEBUGGING
+
     # We copy the buffer values from the first shard as they are not sharded by FSDP
-    for buffer_name in shard_metadata["buffer_names"]:
-        if buffer_name not in unsharded_weights:
-            raise ValueError(f"No buffer found for buffer name {buffer_name}.")
-        for shard_idx in range(num_output_shards):
-            resharded_weights[shard_idx][buffer_name] = unsharded_weights[buffer_name]
-        unsharded_weights.pop(buffer_name)
+    #for buffer_name in shard_metadata["buffer_names"]:
+    #    if buffer_name not in unsharded_weights:
+    #        raise ValueError(f"No buffer found for buffer name {buffer_name}.")
+    #    for shard_idx in range(num_output_shards):
+    #        resharded_weights[shard_idx][buffer_name] = unsharded_weights[buffer_name]
+    #    unsharded_weights.pop(buffer_name)
 
     resharded_metadata = [deepcopy(shard_metadata) for _ in range(num_output_shards)]
     for idx, param_metadata in enumerate(shard_metadata["param_metadata"]):
