@@ -203,8 +203,7 @@ def load_checkpoint(cfg: CheckpointConfig, trainer, **passthrough_args):
         )
 
     suffix = trainer.checkpoint_suffix
-    print('SUFFIX '+suffix)
-    quit() #DEBUGGING
+    
     default_restore_file = "checkpoint_last.pt"
     # default to loading from restore file.
     if cfg.restore_file == default_restore_file:
