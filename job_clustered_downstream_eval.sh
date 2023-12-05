@@ -31,11 +31,6 @@ else
 fi
 
 LANGUAGES=${LANGUAGE_MAP[$CLUSTER]}
-# CROSS not equal to empty string means cross-lingual evaluation
-if [ "$CROSS" != '' ]; then
-    LANGUAGES=${LANGUAGE_MAP[$CLUSTER]}' '${LANGUAGE_MAP[$CROSS]}
-fi
-
 
 if [ "$MODEL_NAME" == "10.4B" ]; then
     MODEL_PREFIX="${BASE_DIR}/experiments/${nc}_clusters/xlbtm.${METHOD}.mu20000.cluster"
