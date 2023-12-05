@@ -1,3 +1,12 @@
+#! /bin/bash
+
+
+TASK=$1
+MODEL_NAME=$2
+
+
+# INITIALIZE ENVIRONMENT
+echo "Initializing environment"
 
 cd /gscratch/zlab/tomlim/mbtm/xl-btm || exit
 
@@ -17,7 +26,7 @@ if [ "$MODEL_NAME" == "xglm-1.7B" ]; then
 elif [ "$MODEL_NAME" == "10.4B" ]; then
     MODEL="${BASE_DIR}/experiments/1_clusters/xlbtm.dense.mu20000.cluster0/hf"
 elif [ "$MODEL_NAME" == "20.9B" ]; then
-    MODEL="${BASE_DIR}/experiments/1_clusters/xlbtm.dense.mu40000.cluster0/hf"
+    MODEL="${BASE_DIR}/experiments/1_clusters_tl/xlbtm.dense.mu40000.cluster0/hf"
 else
     echo "Model name not recognized"
     exit 1
