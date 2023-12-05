@@ -45,7 +45,7 @@ fi
 
 if [ "$CROSS" == "" ] || [ "$CROSS" == "TRG" ] ; then
     MODEL="${MODEL_PREFIX}${CLUSTER}/hf"
-elif [ "$METHOD" == "SRC" ]; then
+elif [ "$CROSS" == "SRC" ]; then
     MODEL="${MODEL_PREFIX}0/hf"
 elif [ "$CROSS" == "ENSEMBLE" ]; then
     MODEL="${MODEL_PREFIX}0/hf ${MODEL_PREFIX}${CLUSTER}/hf"
