@@ -62,11 +62,13 @@ fi
 
 if [ "$CROSS" == "" ]; then
   RESULTS="${BASE_DIR}/results/${MODEL_NAME}/C${nc}_${METHOD}"
+  mkdir -p ${RESULTS}
   # RUN EVALUATION
   echo "Running evaluation for cluster ${CLUSTER} languages: ${LANGUAGES}"
   python3 xl-btm/downstream_eval/prompt.py --model_path ${MODEL} --output_dir ${RESULTS} --task ${TASK} --eval_lang ${LANGUAGES}
 else
   RESULTS="${BASE_DIR}/results/${MODEL_NAME}/C${nc}_${METHOD}_from_en_${CROSS}"
+  mkdir -p ${RESULTS}
   # RUN EVALUATION
   echo "Running cross-lingual evaluation for cluster ${CLUSTER} languages: ${LANGUAGES}, from English examples with ${CROSS} model"
   python3 xl-btm/downstream_eval/prompt.py --model_path ${MODEL} --output_dir ${RESULTS} --task ${TASK} --eval_lang ${LANGUAGES} --demo_lang "en" --k 8

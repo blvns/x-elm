@@ -43,7 +43,7 @@ fi
 
 
 RESULTS="${BASE_DIR}/results/${MODEL_NAME}/dense"
-
+mkdir -p ${RESULTS}
 
 # RUN EVALUATION
 echo "Running evaluation"
