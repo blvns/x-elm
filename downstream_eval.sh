@@ -3,6 +3,7 @@
 
 TASK=$1
 MODEL_NAME=$2
+CROSS==${3:-""}
 
 
 # INITIALIZE ENVIRONMENT
@@ -41,12 +42,19 @@ else
     exit 1
 fi
 
+if [ "$CROSS" == "" ]; then
+  RESULTS="${BASE_DIR}/results/${MODEL_NAME}/dense"
+  mkdir -p ${RESULTS}
 
-RESULTS="${BASE_DIR}/results/${MODEL_NAME}/dense"
-mkdir -p ${RESULTS}
-
-# RUN EVALUATION
-echo "Running evaluation"
-python3 xl-btm/downstream_eval/prompt.py --model_path ${MODEL} --output_dir ${RESULTS} --task ${TASK} --eval_lang ${LANGUAGES[@]}
+  # RUN EVALUATION
+  echo "Running evaluation"
+  python3 xl-btm/downstream_eval/prompt.py --model_path ${MODEL} --output_dir ${RESULTS} --task ${TASK} --eval_lang ${LANGUAGES[@]}
+else
+  RESULTS="${BASE_DIR}/results/${MODEL_NAME}/dense_from_en"
+  mkdir -p ${RESULTS}
+  # RUN EVALUATION
+  echo "Running evaluation with en demonstrations"
+  python3 xl-btm/downstream_eval/prompt.py --model_path ${MODEL} --output_dir ${RESULTS} --task ${TASK} --eval_lang ${LANGUAGES[@]} --demo_lang "en" --k 8
+fi
 
 echo "Evaluation finished"
