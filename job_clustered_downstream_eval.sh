@@ -22,7 +22,7 @@ export PATH="/gscratch/zlab/tomlim/my_gs/miniconda3/bin:$PATH"
 conda activate cbtm
 
 if [ "$TASK" == "xnli" ]; then
-  LANGUAGE_MAP=('en es' 'de el' '' 'hi ur' 'bg ru' 'fr ar' 'tr zh' 'vi zh')
+  LANGUAGE_MAP=('en es' 'de el' '' 'hi ur' 'bg ru' 'fr ar' 'tr zh' 'vi sw')
 elif [ "$TASK" == "xstorycloze" ]; then
   LANGUAGE_MAP=('en es' '' '' 'hi' 'ru' 'ar' 'zh' 'sw')
 else
@@ -31,6 +31,13 @@ else
 fi
 
 LANGUAGES=${LANGUAGE_MAP[$CLUSTER]}
+
+# check if there are languages to evaluate
+if [ "$LANGUAGES" == '' ]; then
+    echo "No languages to evaluate in cluster ${CLUSTER}"
+    exit 0
+fi
+
 
 if [ "$MODEL_NAME" == "10.4B" ]; then
     MODEL_PREFIX="${BASE_DIR}/experiments/${nc}_clusters/xlbtm.${METHOD}.mu20000.cluster"
