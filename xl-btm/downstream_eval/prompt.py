@@ -192,7 +192,7 @@ def main(args):
 		else:
 			data = load_dataset(eval_task, eval_lang, data_dir=datapath)[eval_split]
 		data = data.shuffle(seed=args.rand_seed)
-		data = data.select(list(range(NUM_EVAL_EXAMPLES)))
+		data = data.select(list(range(min(NUM_EVAL_EXAMPLES, len(data)))))
 
 		task_acc_by_run = []
 
