@@ -422,17 +422,14 @@ See this [README](https://l.facebook.com/l.php?u=https%3A%2F%2Fdl.fbaipublicfile
 
 We have provided a script to convert all metaseq models to Huggingface transformers compatible checkpoints.
 
-First, you have to install huggingface transformers [from source](https://huggingface.co/docs/transformers/installation#install-from-source), and make sure you consolidate your metaseq checkpoint using the `consolidate_fsdp_shards.sh` first (see above).
-
 Then run:
 
 ```
-PATH_TO_TRANSFORMERS=/path/to/installed/transformers/library/
 # path to directory containing consolidated.pt checkpoint
 INPUT_DIR=/path/to/metaseq/model/dir
 OUTPUT_DIR=my_huggingface_model
 
-bash metaseq/scripts/convert_hf.sh $PATH_TO_TRANSFORMERS $INPUT_DIR $OUTPUT_DIR
+bash metaseq/scripts/convert_hf.sh $INPUT_DIR $OUTPUT_DIR
 ```
 
 This will output a checkpoint in $OUTPUT_DIR you can use in any huggingface transformers pipeline.
