@@ -24,14 +24,14 @@ LABELS = {
 LANGS = {
 	'xnli': ['ar', 'bg', 'de', 'el', 'en', 'es', 'fr', 'hi', 'ru', 'sw', 'th', 'tr', 'ur', 'vi', 'zh'],
 	'xstorycloze': ['ar', 'en', 'es', 'eu', 'hi', 'id', 'my', 'ru', 'sw', 'te', 'zh'],
-	'northeurlex': ['ru', 'fr', 'es', 'tr', 'ko', 'jp', 'ar', 'de']
+	'northeurlex': ['ru', 'fr', 'es', 'tr', 'ko', 'ja', 'ar', 'de']
 }
 
 NUM_RUNS = 5
 NUM_TRANSLATION_OPTIONS = 4
 NUM_EVAL_EXAMPLES = 1000 #fixed across runs
 ISO_TO_NAME_MAP = {'ru': 'Russian', 'en': 'English', 'fr': 'French', 'es': 'Spanish', 'tr': 'Turkish', 'ko': 'Korean',
-                   'jp': 'Japanese', 'ar': 'Arabic', 'de': 'German'}
+                   'ja': 'Japanese', 'ar': 'Arabic', 'de': 'German'}
 
 def _create_context(task, k, split, eval_lang, datapath, rand_seed, run_id):
 	context = ''
