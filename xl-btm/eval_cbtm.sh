@@ -12,7 +12,7 @@ CONSOLIDATED_MODEL_PATHS=$3;
 echo $CONSOLIDATED_MODEL_PATHS
 # get priors
 PRIORS=$3;
-PRIORS=`echo "${PRIORS}" | tr ',' ' '`
+#PRIORS=`echo "${PRIORS}" | tr ',' ' '`
 echo $PRIORS
 
 
