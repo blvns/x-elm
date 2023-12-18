@@ -457,7 +457,7 @@ def add_args():
 
     cmd_args = parser.parse_args()
     cmd_args.model_paths = cmd_args.model_paths.split(',')
-    cmd_args.priors = [float(x) for x in cmd_args.priors.split(',')]
+    #cmd_args.priors = [float(x) for x in cmd_args.priors.split(',')]
     return cmd_args
 
 def get_shared_folder() -> Path:
