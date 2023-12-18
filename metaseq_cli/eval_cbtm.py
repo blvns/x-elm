@@ -450,9 +450,14 @@ def add_args():
         "--debug", 
         action='store_true',
     )
+    parser.add_argument(
+        "--priors", 
+        type=str,
+    )
 
     cmd_args = parser.parse_args()
     cmd_args.model_paths = cmd_args.model_paths.split(',')
+    cmd_args.priors = [float(x) for x in cmd_args.priors.split(',')]
     return cmd_args
 
 def get_shared_folder() -> Path:
@@ -484,7 +489,7 @@ def builder(cmd_args, dataset, port, eval_cluster, temperature):
         path_to_clusters_dir=cmd_args.path_to_clusters_dir,
         eval_cluster=eval_cluster
     )
-    precomputed_prior = None
+    precomputed_prior = cmd_args.priors if len(cmd_args.priors)>1 else None
     cmd_args.output_dir = cmd_args.job_dir
     call_main(metaseq_cfg,
                 main,
