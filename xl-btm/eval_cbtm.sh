@@ -1,5 +1,5 @@
 export NUM_CLUSTERS=$2;
-#export VALID_LANG=$4
+export VALID_LANG=$5
 # we want as many GPUs as we have clusters
 export NUM_GPUS=${NUM_CLUSTERS};
 export DATASET=mc4_adapt;
@@ -11,7 +11,7 @@ CONSOLIDATED_MODEL_PATHS=$3;
 #CONSOLIDATED_MODEL_PATHS=`echo "${CONSOLIDATED_MODEL_PATHS}" | tr ',' ' '`
 echo $CONSOLIDATED_MODEL_PATHS
 # get priors
-PRIORS=$3;
+PRIORS=$4;
 #PRIORS=`echo "${PRIORS}" | tr ',' ' '`
 echo $PRIORS
 
@@ -22,7 +22,8 @@ echo $PRIORS
 
 #("ar" "bg" "de" "el" "en" "es" "fr" "hi" "ja" "ko" "ru" "sw" "tr" "ur" "vi" "zh")
 # new langs = ("az" "pl" "he" "sv")
-declare -a langs=("sv" "en") # "tr" "ru" "ar" "en")
+#declare -a langs=("sv" "en") # "tr" "ru" "ar" "en")
+declare -a langs=("${VALID_LANG}")
 
 for lang in "${langs[@]}"
 do
