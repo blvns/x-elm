@@ -10,6 +10,11 @@ export SLURM_NTASKS=1;
 CONSOLIDATED_MODEL_PATHS=$3;
 #CONSOLIDATED_MODEL_PATHS=`echo "${CONSOLIDATED_MODEL_PATHS}" | tr ',' ' '`
 echo $CONSOLIDATED_MODEL_PATHS
+# get priors
+PRIORS=$3;
+PRIORS=`echo "${PRIORS}" | tr ',' ' '`
+echo $PRIORS
+
 
 # these model paths should be ordered by cluster ID!
 #JOINED_MODEL_PATHS=$(join ${CONSOLIDATED_MODEL_PATHS[@]})
@@ -32,6 +37,7 @@ do
     --temperature 0.1 \
     --max-valid-steps 5000 \
     --ensemble-type clustering \
+    --priors ${PRIORS} \
     #--submitit
     #--topk 1 
    
