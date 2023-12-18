@@ -2,7 +2,7 @@ export NUM_CLUSTERS=$2;
 #export VALID_LANG=$4
 # we want as many GPUs as we have clusters
 export NUM_GPUS=${NUM_CLUSTERS};
-export DATASET=mc4;
+export DATASET=mc4_adapt;
 #this was missing (might need to be num clusters? idk)
 export SLURM_NTASKS=1;
 
@@ -16,7 +16,8 @@ echo $CONSOLIDATED_MODEL_PATHS
 #echo $JOINED_MODEL_PATHS
 
 #("ar" "bg" "de" "el" "en" "es" "fr" "hi" "ja" "ko" "ru" "sw" "tr" "ur" "vi" "zh")
-declare -a langs=("en" "es" "fr" "hi")
+# new langs = ("az" "pl" "he" "sv")
+declare -a langs=("sv" "en") # "tr" "ru" "ar" "en")
 
 for lang in "${langs[@]}"
 do

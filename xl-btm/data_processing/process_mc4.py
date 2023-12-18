@@ -120,7 +120,7 @@ SHARD_COUNTS = {
 
 def main(args):
     tmp_dir = '~/tmp'
-    output_dir = {'train': '/gscratch/zlab/blvns/xl-elm/data/mc4_adapt/train', 'validation': '/gscratch/zlab/blvns/xl-elm/data/mc4_adapt/valid'}
+    output_dir = {'train': '/gscratch/zlab/blvns/xl-btm/data/mc4_adapt_neighbors/train', 'validation': '/gscratch/zlab/blvns/xl-btm/data/mc4_adapt_neighbors/valid'}
     for split in output_dir:
         if not os.path.exists(output_dir[split]): 
             os.makedirs(output_dir[split])
@@ -141,9 +141,15 @@ def main(args):
                 if shard_idx >= 1024:
                 	break
 
+                l_name = 'he' if lang == 'iw' else lang
                 #skip shards that are already processed
-                output_filename = 'mc4.{}.{}.{}.jsonl'.format(split, lang, shard_idx)
-                output_path = os.path.join(output_dir[split], output_filename)	
+                output_filename = '{}.jsonl'.format(l_name)
+                shard_dir = str(shard_idx).zfill(5)
+                output_path = os.path.join(output_dir[split], shard_dir)
+                if not os.path.exists(output_path): 
+                    os.makedirs(output_path)
+
+                output_path = os.path.join(output_path, output_filename)
                 if os.path.isfile(output_path):
                     print('skipping shard {}...'.format(shard_idx))
                     continue
@@ -156,9 +162,13 @@ def main(args):
                 #shard = load_dataset('mc4', lang, split='{}'.format(split), cache_dir=PATH_TO_CACHE)
                 shard = mc4.select(shard_ids)
 
+                #add lang code as meta data for each element in shard
+
                 #add index for each element in shard
                 element_idxs = list(range(0, len(shard)))
+                lang_arr = [l_name]*len(shard)   
                 shard = shard.add_column(name="id", column=element_idxs)
+                shard = shard.add_column(name="lang", column=lang_arr)
 
                 #DEBUGGING
                 print(shard)
@@ -166,6 +176,17 @@ def main(args):
                 #write out shard as .jsonl file
                 shard.to_json(output_path, lines=True, orient='records', \
                 	force_ascii=False)
+
+                if split == 'validation':
+                    output_path2 = os.path.join(output_dir[split]+'_{}'.format(l_name), shard_dir)
+                    if not os.path.exists(output_path2): 
+                        os.makedirs(output_path2)
+                    output_filename = 'mc4.jsonl'
+                    output_path2 = os.path.join(output_path2, output_filename)
+
+                    shard.to_json(output_path2, lines=True, orient='records', \
+                    force_ascii=False)
+
 
                 end = time.time()
                 print(str(end-start)+' seconds to process shard '+str(shard_idx))

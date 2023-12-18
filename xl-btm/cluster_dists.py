@@ -123,11 +123,11 @@ def main():
 			lang_data = [d/lang_total for d in lang_data]
 
 			#print top 1 cluster for each expert
-			#lang_data = lang_data.index(max(lang_data))
+			lang_data = lang_data.index(max(lang_data))
 
 			data.append(lang_data)
 
-		'''
+                '''
 		#doing lang assign clusters
 		cluster_dist = {
 			4: {'en': 0, 'es': 0, 'bg': 0, 'ru': 0, 'ja': 1, 'ko': 1, 'tr': 1, 'zh': 1, 'de': 2, 'el': 2, 'fr': 2, 'ar': 2, 'hi': 3, 'ur': 3, 'vi': 3, 'sw': 3},

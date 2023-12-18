@@ -136,15 +136,23 @@ def _assign_to_cluster(lang2cluster, source_path_prefix, cluster_path_prefix, sh
 	return
 
 def main(args):
-	SOURCE_DIR = "/gscratch/zlab/blvns/xl-btm/data/mc4/"
+	SOURCE_DIR = "/gscratch/zlab/blvns/xl-btm/data/mc4_adapt/"
 	SUB_DIRS = ['train', 'valid']
-	CLUSTER_DIR = "/gscratch/zlab/blvns/xl-btm/clusters_lang/mc4/{}".format(args.num_clusters)
+	#CLUSTER_DIR = "/gscratch/zlab/blvns/xl-btm/clusters_lang/mc4/{}".format(args.num_clusters)
+	CLUSTER_DIR = "/gscratch/zlab/blvns/xl-btm/clusters_lang/mc4_adapt/4"
 
-	LANGS = ['en', 'fr', 'es', 'de', 'el', 'bg', 'ru', 'tr', 'ar', 'vi', 'zh', 'hi', 'sw', 'ur', 'ja', 'ko']
+	'''
+	#LANGS = ['en', 'fr', 'es', 'de', 'el', 'bg', 'ru', 'tr', 'ar', 'vi', 'zh', 'hi', 'sw', 'ur', 'ja', 'ko']
 
 	#partition langs into clusters based on typological similarity
 	cluster_map = _train_clusterer(LANGS, args.num_clusters)
 	print(cluster_map)
+	'''
+	
+	#Hard-coding mapping for adapt experiments
+	cluster_map = {'he': 0, 'ar': 0, 'sv': 1, 'en': 1, 'pl': 2, 'ru': 2, 'az': 3, 'tr': 3}
+	print(cluster_map)
+
 
 	#log cluster map to file
 	Path(CLUSTER_DIR).mkdir(parents=True, exist_ok=True) #make directory if doesn't exist
@@ -169,8 +177,6 @@ def main(args):
 		_ = Parallel(n_jobs=4, timeout=timeout)(delayed(_assign_to_cluster)(cluster_map, source_path_prefix, cluster_path_prefix, shard_dir) for shard_dir in tqdm(shard_dirs))
 
 	return
-
-
 
 
 if __name__ == "__main__":
