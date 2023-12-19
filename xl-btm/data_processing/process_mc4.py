@@ -120,7 +120,7 @@ SHARD_COUNTS = {
 
 def main(args):
     tmp_dir = '~/tmp'
-    output_dir = {'train': '/gscratch/zlab/blvns/xl-btm/data/mc4_adapt_neighbors/train', 'validation': '/gscratch/zlab/blvns/xl-btm/data/mc4_adapt_neighbors/valid'}
+    output_dir = {'train': '/gscratch/zlab/blvns/xl-btm/data/mc4_adapt/train', 'validation': '/gscratch/zlab/blvns/xl-btm/data/mc4_adapt/valid'}
     for split in output_dir:
         if not os.path.exists(output_dir[split]): 
             os.makedirs(output_dir[split])
@@ -128,7 +128,7 @@ def main(args):
     for lang in args.langs:
         assert lang in SHARD_COUNTS.keys()
 
-        for split in ['train', 'validation']:
+        for split in ['validation']: #not doing train
             #load to get full size of dataset
             mc4 = load_dataset('mc4', lang, split=split, cache_dir=PATH_TO_CACHE)
 

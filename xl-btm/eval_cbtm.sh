@@ -1,5 +1,5 @@
 export NUM_CLUSTERS=$2;
-export VALID_LANG=$5
+export VALID_LANG=$4
 # we want as many GPUs as we have clusters
 export NUM_GPUS=${NUM_CLUSTERS};
 export DATASET=mc4_adapt;
@@ -11,9 +11,9 @@ CONSOLIDATED_MODEL_PATHS=$3;
 #CONSOLIDATED_MODEL_PATHS=`echo "${CONSOLIDATED_MODEL_PATHS}" | tr ',' ' '`
 echo $CONSOLIDATED_MODEL_PATHS
 # get priors
-PRIORS=$4;
+#PRIORS=$4;
 #PRIORS=`echo "${PRIORS}" | tr ',' ' '`
-echo $PRIORS
+#echo $PRIORS
 
 
 # these model paths should be ordered by cluster ID!
@@ -32,14 +32,15 @@ do
    python -m metaseq_cli.eval_cbtm \
     --data-dir ${DATA_DIR}/${DATASET} \
     --data-subset valid_"$lang" \
-    --path-to-clusterer ${KMEANS_DIR}/${DATASET}/${NUM_CLUSTERS}/ \
+    --path-to-clusterer ${KMEANS_DIR}/mc4/${NUM_CLUSTERS}/ \
     --model-paths $CONSOLIDATED_MODEL_PATHS \
     --job-dir ${EVAL_DIR} \
     --temperature 0.1 \
     --max-valid-steps 5000 \
     --ensemble-type clustering \
-    --priors ${PRIORS} \
+    #--priors ${PRIORS} \
     #--submitit
+    #--ensemble-type clustering
     #--topk 1 
    
 done
