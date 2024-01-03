@@ -74,8 +74,10 @@ def load_data(dataset_name, dataset_dir, split, language, kmeans, vectorizer, hf
     
     remove_columns = [key for key in list(itertools.islice(raw_datasets[split], 1))[0].keys()]
 
-    def tokenize_function(example):
-        return tokenizer(" ".join([example[tc] for tc in text_columns]))
+    def tokenize_function(examples):
+        texts = zip(*[examples[column] for column in text_columns])
+        return tokenizer([" ".join(text) for text in texts])
+
 
     with accelerator.main_process_first():
         tokenized_datasets = raw_datasets.map(
@@ -157,7 +159,7 @@ def load_model(path_to_model):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("--dataset-dir")
+    parser.add_argument("--dataset-dir", default=None)
     parser.add_argument("--dataset-name")
     parser.add_argument("--columns", nargs='+', default=['text'])
     parser.add_argument("--path-to-clusterer", type=Path)
