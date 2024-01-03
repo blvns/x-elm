@@ -37,22 +37,20 @@ class NumberNormalizingVectorizer(TfidfVectorizer):
         tokenize = super().build_tokenizer()
         return lambda doc: list(number_normalizer(tokenize(doc)))
 
-def load_data(file, dataset_name, dataset_config, kmeans, vectorizer, seed=42, max_eval_samples=None, group_texts=False, column=None):
+def load_data(dataset_name, dataset_dir, split, language, kmeans, vectorizer, hf_format=False, seed=42, max_eval_samples=None, group_texts=False, columns=None):
     
     set_seed(seed)
     accelerator = Accelerator()
     tokenizer = AutoTokenizer.from_pretrained('facebook/xglm-1.7B')
 
-    if file is not None:
+    if not hf_format:
+        file = os.path.join(args.dataset_dir, args.dataset_name)
         train_file = None
         validation_file = file
 
         data_files = {}
         dataset_args = {}
-        if train_file is not None:
-            data_files["train"] = train_file
-        if validation_file is not None:
-            data_files["validation"] = validation_file
+        data_files[split]= file
         extension = (
             train_file.split(".")[-1]
             if train_file is not None
@@ -70,21 +68,14 @@ def load_data(file, dataset_name, dataset_config, kmeans, vectorizer, seed=42, m
         elif "jsonl" in file:
             raw_datasets = load_dataset("json", data_files=data_files, cache_dir=None, use_auth_token=None, **dataset_args)
     else:
-        raw_datasets = load_dataset(
-            dataset_name,
-            dataset_config,
-            split='validation',
-            cache_dir=None,
-            use_auth_token=None,
-            streaming=False
-        )
+        raw_datasets = load_dataset(dataset_name, language, data_dir=dataset_dir)
 
-    text_column = column
+    text_columns = columns
     
-    remove_columns = [key for key in list(itertools.islice(raw_datasets['validation'], 1))[0].keys()]
+    remove_columns = [key for key in list(itertools.islice(raw_datasets[split], 1))[0].keys()]
 
-    def tokenize_function(examples):
-        return tokenizer(examples[text_column])
+    def tokenize_function(example):
+        return tokenizer(" ".join([example[tc] for tc in text_columns]))
 
     with accelerator.main_process_first():
         tokenized_datasets = raw_datasets.map(
@@ -155,11 +146,7 @@ def load_data(file, dataset_name, dataset_config, kmeans, vectorizer, seed=42, m
             batched=True,
             desc="Generating context clusters",
         )
-    if dataset_name is not None:
-        eval_dataset = tokenized_datasets
-    else:
-        eval_dataset = tokenized_datasets["validation"]
-    return eval_dataset
+    return tokenized_datasets[split]
 
 
 def load_model(path_to_model):
@@ -172,11 +159,12 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--dataset-dir")
     parser.add_argument("--dataset-name")
-    parser.add_argument("--dataset-config")
-    parser.add_argument("--column", default="text")
+    parser.add_argument("--columns", nargs='+', default=['text'])
     parser.add_argument("--path-to-clusterer", type=Path)
     parser.add_argument("--mixture-folder")
+    parser.add_argument("--hf-format", action='store_true')
 
+    parser.add_argument("--split", default='validation')
     parser.add_argument("--seed", default=42)
     parser.add_argument('--lang', type=str)
 
@@ -190,11 +178,12 @@ if __name__ == '__main__':
     kmeans = load_model(args.path_to_clusterer / "kmeans.pkl")
     print('Loaded kmeans clusters!')
    
-    eval_file = os.path.join(args.dataset_dir, '00000/mc4.jsonl')
-    mixture_file_name = os.path.join(args.mixture_folder, 'valid_{}'.format(args.lang), 'cluster{}.npy')
+    #eval_file = os.path.join(args.dataset_dir, '00000/mc4.jsonl')
+    mixture_file_name = os.path.join(args.mixture_folder, f'{args.split}_{args.lang}', 'cluster.npy')
 
     # load dataset
-    eval_dataset = load_data(eval_file, args.dataset_name, args.dataset_config, kmeans, vectorizer, group_texts=False, column=args.column)
+    eval_dataset = load_data(args.dataset_name, args.dataset_dir, args.split, args.lang, kmeans, vectorizer,
+                             hf_format=args.hf_format, group_texts=False, columns=args.columns)
     
     # batch dataset
     eval_dataloader = DataLoader(
