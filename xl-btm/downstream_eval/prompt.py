@@ -82,7 +82,8 @@ def _fwd(model, input_ids, context_key_values, gpu_id=0):
 	logits = output['logits'].squeeze()
 	return logits.to("cpu")
 
-def score(models_arr, tokenizer, input_text, trg_lang, context_key_values_arr, alpha=1):
+
+def score(models_arr, tokenizer, input_text, trg_lang, context_key_values_arr, alphas=(1.0,)):
 	scores = []
 
 	#process shared subset first and get model state
@@ -102,17 +103,8 @@ def score(models_arr, tokenizer, input_text, trg_lang, context_key_values_arr, a
 
 		#handle outputs for ensembling
 		if len(outputs) > 1:
-			#ensemble logits
-			interpol_weights = [alpha, 1-alpha]
-			#print(outputs[0])
-			#input('...')
-			#print(outputs[1])
-			#input('...')
-			output_0 = outputs[0]*interpol_weights[0]
-			output_1 = outputs[1]*interpol_weights[1]
-			output = output_0.add(output_1)
-			#print(output)
-			#quit()
+			assert len(outputs) == len(alphas), "The number of tensors and weights must be the same"
+			output = sum(o * a for o, a in zip(outputs, alphas))
 		else:
 			output = outputs[0]
 
@@ -191,6 +183,12 @@ def main(args):
 			data = DatasetDict.load_from_disk("{}/{}".format(datapath, eval_lang))[eval_split]
 		else:
 			data = load_dataset(eval_task, eval_lang, data_dir=datapath)[eval_split]
+
+		if args.tfidf_task_dir and args.tfidf_mode is not None:
+			cluster_probs = np.load(os.path.join(args.tfidf_task_dir, f"{eval_split}_{eval_lang}", 'cluster.npy'))
+			# add cluster probs to dataset
+			data = data.add_column('cluster_probs', cluster_probs.tolist())
+
 		data = data.shuffle(seed=args.rand_seed)
 		data = data.select(list(range(min(NUM_EVAL_EXAMPLES, len(data)))))
 
@@ -240,7 +238,18 @@ def main(args):
 					example_texts.extend([_create_example(example, eval_task, label=alt_exmpl['tgt'], eval_lang=eval_lang) for alt_exmpl in data.select(sample_option_indices)])
 					gold_label_idx = 0
 				#run through model + score
-				x = score(models, tokenizer, example_texts, eval_lang, contexts, alpha=args.ensemble_alpha)
+				if 'cluster_probs' in example:
+					if args.tf_idf_mode == 'top1':
+						alphas = [0.0]*len(example['cluster_probs'])
+						alphas[np.argmax(example['cluster_probs'])] = 1.0
+					elif args.tf_idf_mode == 'ensemble':
+						alphas = example['cluster_probs']
+					else:
+						raise ValueError(f'Invalid cluster attribution mode mode: {args.tf_idf_mode}.'
+						                 f' Valid options are: top1, ensemble')
+				else:
+					alphas = [args.ensemble_alpha, 1. - args.ensemble_alpha]
+				x = score(models, tokenizer, example_texts, eval_lang, contexts, alphas=alphas)
 				scores.append((gold_label_idx, x))
 
 			#write out scores to file!
@@ -292,6 +301,14 @@ if __name__ == "__main__":
 	    "--ensemble_alpha", default=0.5, type=float,
 	)
 
+	parser.add_argument(
+	    "--tfidf_task_dir", type=str, default=None,
+	)
+
+	parser.add_argument(
+		"--tfidf_mode", type=str, default=None,
+		choices=[None, 'top1', 'ensemble']
+	)
 	args = parser.parse_args()
 	print(args)
 
