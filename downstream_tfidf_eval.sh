@@ -3,7 +3,7 @@
 
 TASK=$1
 TFIDF_MODE=$2
-CROSS==${3:-""}
+CROSS=${3:-""}
 
 
 
@@ -48,19 +48,19 @@ else
 fi
 
 if [ "$CROSS" == "" ]; then
-  RESULTS="${BASE_DIR}/results/${MODEL_NAME}/C${CLUSTERS}_tfidf"
+  RESULTS="${BASE_DIR}/results/${MODEL_NAME}/C${CLUSTERS}_tfidf_${TFIDF_MODE}"
   mkdir -p ${RESULTS}
   # RUN EVALUATION
   echo "Running evaluation"
-  python3 xl-btm/downstream_eval/prompt.py --model_path ${MODEL} --output_dir ${RESULTS} \
+  python3 xl-btm/downstream_eval/prompt.py --model_path ${MODELS} --output_dir ${RESULTS} \
     --task ${TASK} --eval_lang ${LANGUAGES[@]} \
     --tfidf_task_dir ${TFIDF_TASK_DIR} --tfidf_mode ${TFIDF_MODE}
 else
-  RESULTS="${BASE_DIR}/results/${MODEL_NAME}/dense_from_en"
+  RESULTS="${BASE_DIR}/results/${MODEL_NAME}/C${CLUSTERS}_tfidf_${TFIDF_MODE}_from_en"
   mkdir -p ${RESULTS}
   # RUN EVALUATION
   echo "Running evaluation with en demonstrations"
-  python3 xl-btm/downstream_eval/prompt.py --model_path ${MODEL} --output_dir ${RESULTS} \
+  python3 xl-btm/downstream_eval/prompt.py --model_path ${MODELS} --output_dir ${RESULTS} \
     --task ${TASK} --eval_lang ${LANGUAGES[@]} --demo_lang "en" --k 8 \
     --tfidf_task_dir ${TFIDF_TASK_DIR} --tfidf_mode ${TFIDF_MODE}
 fi

@@ -239,13 +239,13 @@ def main(args):
 					gold_label_idx = 0
 				#run through model + score
 				if 'cluster_probs' in example:
-					if args.tf_idf_mode == 'top1':
+					if args.tfidf_mode == 'top1':
 						alphas = [0.0]*len(example['cluster_probs'])
 						alphas[np.argmax(example['cluster_probs'])] = 1.0
-					elif args.tf_idf_mode == 'ensemble':
+					elif args.tfidf_mode == 'ensemble':
 						alphas = example['cluster_probs']
 					else:
-						raise ValueError(f'Invalid cluster attribution mode mode: {args.tf_idf_mode}.'
+						raise ValueError(f'Invalid cluster attribution mode mode: {args.tfidf_mode}.'
 						                 f' Valid options are: top1, ensemble')
 				else:
 					alphas = [args.ensemble_alpha, 1. - args.ensemble_alpha]
