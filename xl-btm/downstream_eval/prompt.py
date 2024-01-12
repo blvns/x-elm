@@ -185,9 +185,15 @@ def main(args):
 			data = load_dataset(eval_task, eval_lang, data_dir=datapath)[eval_split]
 
 		if args.tfidf_task_dir and args.tfidf_mode is not None:
-			cluster_probs = np.load(os.path.join(args.tfidf_task_dir, f"{eval_split}_{eval_lang}", 'cluster.npy'))
-			# add cluster probs to dataset
-			data = data.add_column('cluster_probs', cluster_probs.tolist())
+			if args.k == 0:
+				cluster_probs = np.load(os.path.join(args.tfidf_task_dir, f"{eval_split}_{eval_lang}", 'cluster.npy'))
+				# add cluster probs to dataset
+				data = data.add_column('cluster_probs', cluster_probs.tolist())
+			else:
+				for run_id in range(NUM_RUNS):
+					cluster_probs = np.load(os.path.join(args.tfidf_task_dir, f"{eval_task}_{eval_split}_{eval_lang}_k8_{run_id}", 'cluster.npy'))
+					# add cluster probs to dataset
+					data = data.add_column(f'cluster_probs_{run_id}', cluster_probs.tolist())
 
 		data = data.shuffle(seed=args.rand_seed)
 		data = data.select(list(range(min(NUM_EVAL_EXAMPLES, len(data)))))
@@ -238,12 +244,16 @@ def main(args):
 					example_texts.extend([_create_example(example, eval_task, label=alt_exmpl['tgt'], eval_lang=eval_lang) for alt_exmpl in data.select(sample_option_indices)])
 					gold_label_idx = 0
 				#run through model + score
-				if 'cluster_probs' in example:
+				if args.tfidf_task_dir and args.tfidf_mode is not None:
+					if args.k == 0:
+						cluster_probs_field = 'cluster_probs'
+					else:
+						cluster_probs_field = 'cluster_probs_{}'.format(run_id)
 					if args.tfidf_mode == 'top1':
-						alphas = [0.0]*len(example['cluster_probs'])
-						alphas[np.argmax(example['cluster_probs'])] = 1.0
+						alphas = [0.0]*len(example[cluster_probs_field])
+						alphas[np.argmax(example[cluster_probs_field])] = 1.0
 					elif args.tfidf_mode == 'ensemble':
-						alphas = example['cluster_probs']
+						alphas = example[cluster_probs_field]
 					else:
 						raise ValueError(f'Invalid cluster attribution mode mode: {args.tfidf_mode}.'
 						                 f' Valid options are: top1, ensemble')
