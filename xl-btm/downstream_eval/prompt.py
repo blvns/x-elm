@@ -42,7 +42,7 @@ def _create_context(task, k, split, eval_lang, datapath, rand_seed, run_id):
 	data = data.select(list(range(k)))
 
 	for example in data:
-		if task == 'xnli': gold_label = example['label']
+		if task == 'xnli': gold_label = LABELS['xnli'][int(example['label'])]
 		elif task == 'xstorycloze': gold_label = example['sentence_quiz2'] if example['answer_right_ending'] == 2 else example['sentence_quiz1']
 		elif task == 'northeurlex': gold_label = example['tgt']
 		example_text = _create_example(example, task, gold_label, eval_lang)
