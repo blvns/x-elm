@@ -128,7 +128,7 @@ def main(args):
     for lang in args.langs:
         assert lang in SHARD_COUNTS.keys()
 
-        for split in ['validation']: #not doing train
+        for split in ['train', 'validation']: #not doing train
             #load to get full size of dataset
             mc4 = load_dataset('mc4', lang, split=split, cache_dir=PATH_TO_CACHE)
 
