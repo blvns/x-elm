@@ -130,7 +130,7 @@ def main(args):
 
         for split in ['train', 'validation']: #not doing train
             #load to get full size of dataset
-            mc4 = load_dataset('allenai/mc4', lang, split=split, cache_dir=PATH_TO_CACHE)
+            mc4 = load_dataset('mc4', lang, split=split, cache_dir=PATH_TO_CACHE)
 
             #calculate which records go in which shards
             split_ids = np.arange(len(mc4))
