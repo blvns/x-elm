@@ -6,7 +6,7 @@ import argparse
 from tqdm import tqdm
 
 def main(args):
-	DATA_DIR = "/gscratch/zlab/blvns/xl-btm/data/mc4_adapt/train"
+	DATA_DIR = "/gscratch/zlab/blvns/xl-btm/data/mc4/train"
 
 	#get all shard dirs 
 	shard_dirs = os.listdir(DATA_DIR) 
