@@ -120,7 +120,7 @@ SHARD_COUNTS = {
 
 def main(args):
     tmp_dir = '~/tmp'
-    output_dir = {'train': '/gscratch/zlab/blvns/xl-btm/data/mc4_adapt/train', 'validation': '/gscratch/zlab/blvns/xl-btm/data/mc4_adapt/valid'}
+    output_dir = {'train': '/gscratch/zlab/blvns/xl-btm/data/mc4/train', 'validation': '/gscratch/zlab/blvns/xl-btm/data/mc4/valid'}
     for split in output_dir:
         if not os.path.exists(output_dir[split]): 
             os.makedirs(output_dir[split])
