@@ -9,7 +9,7 @@ import json
 
 import random
 
-SKIP_SHARD_MAX = 314
+SKIP_SHARD_MAX = -1
 
 
 def _concat(input_fps, output_fp):
@@ -38,7 +38,7 @@ def _shuf(input_fp, output_fp):
 
 def main():
 
-	SOURCE_DIR = "/gscratch/zlab/blvns/xl-btm/data/mc4_adapt/"
+	SOURCE_DIR = "/gscratch/zlab/blvns/xl-btm/data/mc4_copy/"
 	SOURCE_SUB_DIRS = ['train', 'valid']
 	
 	#for every subdirectory in source directory
