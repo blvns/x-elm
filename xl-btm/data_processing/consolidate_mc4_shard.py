@@ -38,7 +38,7 @@ def _shuf(input_fp, output_fp):
 
 def main():
 
-	SOURCE_DIR = "/gscratch/zlab/blvns/xl-btm/data/mc4_copy/"
+	SOURCE_DIR = "/gscratch/zlab/blvns/xl-btm/data/mc4/"
 	SOURCE_SUB_DIRS = ['train', 'valid']
 	
 	#for every subdirectory in source directory
