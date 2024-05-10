@@ -4,7 +4,7 @@ import argparse
 import time
 import numpy as np
 
-PATH_TO_CACHE = '/gscratch/scrubbed/blvns/'
+PATH_TO_CACHE = '/gscratch/zlab/blvns/data/'
 
 SHARD_COUNTS = {
     "af": {"train": 64, "validation": 1},
