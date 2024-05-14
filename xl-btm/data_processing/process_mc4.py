@@ -133,7 +133,7 @@ def main(args):
             if split == 'train' and lang == 'en': 
             	dataset_files = "multilingual/c4-en.tfrecord-0000*-of-*.json.gz"
             	mc4 = load_dataset('mc4', lang, split=split, dataset_files=dataset_files, cache_dir=PATH_TO_CACHE) #allenai/c4
-	    else: mc4 = load_dataset('mc4', lang, split=split, cache_dir=PATH_TO_CACHE)
+            else: mc4 = load_dataset('mc4', lang, split=split, cache_dir=PATH_TO_CACHE)
 
             #calculate which records go in which shards
             split_ids = np.arange(len(mc4))
