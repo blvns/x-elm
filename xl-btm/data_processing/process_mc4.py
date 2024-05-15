@@ -6,6 +6,8 @@ from tqdm import tqdm
 import numpy as np
 
 PATH_TO_CACHE = '/gscratch/scrubbed/blvns/'
+datasets.config.STREAMING_READ_MAX_RETRIES = 120
+datasets.config.STREAMING_READ_RETRY_INTERVAL = 5
 
 SHARD_COUNTS = {
     "af": {"train": 64, "validation": 1},
