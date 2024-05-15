@@ -2,7 +2,7 @@ from datasets import load_dataset
 import os
 import argparse
 import time
-from tqdm umport tqdm
+from tqdm import tqdm
 import numpy as np
 
 PATH_TO_CACHE = '/gscratch/scrubbed/blvns/'
