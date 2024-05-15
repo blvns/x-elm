@@ -2,6 +2,7 @@ from datasets import load_dataset
 import os
 import argparse
 import time
+from tqdm umport tqdm
 import numpy as np
 
 PATH_TO_CACHE = '/gscratch/scrubbed/blvns/'
@@ -132,14 +133,14 @@ def main(args):
             #load to get full size of the dataset
             if lang == 'en': 
             	mc4 = load_dataset('allenai/c4', lang, split=split, streaming=True)#, cache_dir=PATH_TO_CACHE) #allenai/c4
-            	split_ids = sum([1 for x in mc4])
+            	split_ids = sum([1 for x in tqdm(mc4)])
             	mc4 = load_dataset('allenai/c4', lang, split=split, streaming=True)#, cache_dir=PATH_TO_CACHE) #allenai/c4
             else: 
             	mc4 = load_dataset('mc4', lang, split=split, cache_dir=PATH_TO_CACHE)
             	split_ids = np.arange(len(mc4))
 
             #calculate which records go in which shards
-            split_ids = np.arange(len(mc4))
+            #split_ids = np.arange(len(mc4))
             split_ids_arr = np.array_split(split_ids, SHARD_COUNTS[lang][split])
             print(len(split_ids_arr))
 
