@@ -134,13 +134,13 @@ def main(args):
 
         for split in ['train', 'validation']: #not doing train
             #load to get full size of the dataset
-            if lang == 'en': 
-            	mc4 = load_dataset('allenai/c4', lang, split=split, streaming=True)#, cache_dir=PATH_TO_CACHE) #allenai/c4
-            	split_ids = sum([1 for x in tqdm(mc4)])
-            	mc4 = load_dataset('allenai/c4', lang, split=split, streaming=True)#, cache_dir=PATH_TO_CACHE) #allenai/c4
-            else: 
-            	mc4 = load_dataset('mc4', lang, split=split, cache_dir=PATH_TO_CACHE)
-            	split_ids = np.arange(len(mc4))
+            #if lang == 'en': 
+            #	mc4 = load_dataset('allenai/c4', lang, split=split, streaming=True)#, cache_dir=PATH_TO_CACHE) #allenai/c4
+            #	split_ids = sum([1 for x in tqdm(mc4)])
+            #	mc4 = load_dataset('allenai/c4', lang, split=split, streaming=True)#, cache_dir=PATH_TO_CACHE) #allenai/c4
+            #else: 
+            mc4 = load_dataset('mc4', lang, split=split, cache_dir=PATH_TO_CACHE)
+            split_ids = np.arange(len(mc4))
 
             #calculate which records go in which shards
             #split_ids = np.arange(len(mc4))
