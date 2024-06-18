@@ -9,7 +9,7 @@ import json
 
 import random
 
-SKIP_SHARD_MAX = -1
+SKIP_SHARD_MAX = 990
 
 
 def _concat(input_fps, output_fp):
@@ -21,7 +21,7 @@ def _concat(input_fps, output_fp):
 
 def _reindex(lines):
 	lines = [l for l in lines if len(l.split()) > 0]
-	for i in range(0, len(lines)):
+	for i in tqdm(range(0, len(lines))):
 		line = lines[i]
 		line_json = json.loads(line) #convert to json dict
 		line_json['id'] = i #update index
@@ -53,7 +53,7 @@ def main():
 		print(shard_dirs)
 
 		#for every shard...
-		for shard_dir in tqdm(shard_dirs):
+		for shard_dir in shard_dirs:
 
 			#manually skipping shards we already finished consolidating
 			if sub_dir == 'train' and int(shard_dir) <= SKIP_SHARD_MAX: 
@@ -85,6 +85,7 @@ def main():
 			_ = _shuf(tmp_str, shuffled_str)
 			subprocess.call("rm {}".format(' '.join(input_strs)), shell=True)
 			subprocess.call("rm {}".format(tmp_str), shell=True)
+			print('consolidated {} {}'.format(sub_dir, shard_dir))
 				
 
 
