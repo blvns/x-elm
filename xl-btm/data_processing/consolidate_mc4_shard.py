@@ -71,9 +71,9 @@ def main():
 			tmp_str = os.path.join(target_path_prefix, 'tmp.jsonl')
 			shuffled_str = os.path.join(target_path_prefix, 'mc4.jsonl')
 
-			#print(input_strs)
-			#print(tmp_str) 
-			#print(shuffled_str)
+			print(input_strs)
+			print(tmp_str) 
+			print(shuffled_str)
 			#input('...')
 
 			#subprocess.call("cat {} > {}".format(input_str, tmp_str), shell=True)
@@ -86,7 +86,7 @@ def main():
 			subprocess.call("rm {}".format(' '.join(input_strs)), shell=True)
 			subprocess.call("rm {}".format(tmp_str), shell=True)
 			print('consolidated {} {}'.format(sub_dir, shard_dir))
-				
+			print(' ')
 
 
 
