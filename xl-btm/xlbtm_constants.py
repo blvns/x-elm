@@ -24,9 +24,10 @@ PRETRAINED_MODELS_DIR="/gscratch/zlab/blvns/xl-btm/pretrained_models/xglm/"
 # path to 6.7B parameter OPT checkpoint
 #PATH_TO_6_7B_MODEL="/gscratch/zlab/blvns/opt/6.7b/checkpoint_last.pt"
 
-# path to 1.7B parameter XGLM checkpoint
+# path to XGLM original checkpoints
 PATH_TO_1_7B_MODEL="/gscratch/zlab/blvns/xl-btm/pretrained_models/xglm/1.7b/model.pt"
-
+PATH_TO_2_9B_MODEL="/gscratch/zlab/blvns/xl-btm/pretrained_models/xglm/2.9b/model.pt"
+PATH_TO_7_5B_MODEL="/gscratch/zlab/blvns/xl-btm/pretrained_models/xglm/7.5b/model.pt"
 
 
 # path to cbtm library
