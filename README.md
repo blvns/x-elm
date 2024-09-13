@@ -1,18 +1,18 @@
-# Cluster-Branch-Train-Merge (c-BTM)
+# Cross-lingual Expert Language Models (X-ELM)
 
-Code for the paper *Scaling Expert Language Models with Unsupervised Domain Discovery*
+Code for the paper *Breaking the Curse of Multilinguality with Cross-lingual Expert Language Models*
 
-This repository is a fork of [metaseq](https://github.com/facebookresearch/metaseq/).
+This repository is a fork of [c-BTM](https://github.com/kernelmachine/cbtm).
 
 ## Citation
 
 If you use this code, please consider citing our work:
 
 ```
-@article{cbtm,
- author = {Suchin Gururangan and Margaret Li and Mike Lewis and Weijia Shi and Tim Althoff and Noah A. Smith and Luke Zettlemoyer},
- title = {Scaling Expert Language Models with Unsupervised Domain Discovery},
- year = {2023}
+@article{blevins2024breaking,
+ author = {Terra Blevins and Tomasz Limisiewicz and Suchin Gururangan and Margaret Li and Hila Gonen and Noah A. Smith and Luke Zettlemoyer.},
+ title = {Breaking the Curse of Multilinguality with Cross-lingual Expert Language Models},
+ year = {2024}
 }
 ```
 
