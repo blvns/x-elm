@@ -2,24 +2,19 @@ import argparse
 import os
 import subprocess
 
-from metaseq.xlbtm_constants import (DEFAULT_SLURM_ACCOUNT,
+from metaseq.xelm_constants import (DEFAULT_SLURM_ACCOUNT,
                                              DEFAULT_SLURM_CONSTRAINT,
                                              DEFAULT_SLURM_PARTITION,
-                                             PATH_TO_CBTM)
-
-# using getlogin() returning username
-# username = os.getlogin()
+                                             PATH_TO_XELM)
 
 LEARNING_RATES = {
-    #"1.3b": 2e-5,
-    #"6.7b": 1.2e-5
     "1.7b": 2e-5,
 }
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    #OPT model sizes followed by XGLM model sizes
-    parser.add_argument("--model-size", choices=['1.7b']) #['1.3b', '6.7b']
+    #XGLM model sizes
+    parser.add_argument("--model-size", choices=['1.7b'])
     parser.add_argument("--run", choices=['slurm', 'local'])
     parser.add_argument("--path-to-clusters-dir")
     parser.add_argument("--data-name", type=str)
