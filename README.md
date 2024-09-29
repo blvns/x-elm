@@ -1,6 +1,6 @@
 # Cross-lingual Expert Language Models (X-ELM)
 
-Code for the paper *Breaking the Curse of Multilinguality with Cross-lingual Expert Language Models*
+Code for the paper *Breaking the Curse of Multilinguality with Cross-lingual Expert Language Models*.
 
 This repository is a fork of [c-BTM](https://github.com/kernelmachine/cbtm).
 
@@ -64,6 +64,8 @@ pip3 install -e .
 
 ### (Optional) Install Apex
 
+NOTE: we don't use Apex for the X-ELM experiments, but you may need it for other functionalities in this repository.
+
 Apex may not be compatible with all GPUs. In particular, if you're seeing that CUDA doesn't support your model during the forward pass, you might want to try uninstalling Apex and trying again.
 
 ```bash
@@ -78,9 +80,9 @@ Depending on your hardware, you may need to comment out lines 101-107 in setup.p
 pip3 install -v --no-cache-dir --global-option="--cpp_ext" --global-option="--cuda_ext" --global-option="--deprecated_fused_adam" --global-option="--xentropy" --global-option="--fast_multihead_attn" ./
 ```
 
-### Install c-BTM library
+### Install X-ELM library
 
-Build the c-BTM library. This won't really do anything if you've used the `environment.yml` file to build your conda environment.
+Build the X-ELM library. This won't really do anything if you've used the `environment.yml` file to build your conda environment.
 
 ```bash
 cd /path/to/cbtm
@@ -88,26 +90,25 @@ pip3 install -e .
 ```
 
 
-# c-BTM Training and Evaluation
+# X-ELM Training and Evaluation
 
 ## Step 0: Set up data, models, and directories
 
 We'll use the following environment variables in this tutorial, for simplicity. You can set these to whatever you want.
 
 ```bash
-export CBTM_DIR=$PWD; 
-export DATA_DIR=${CBTM_DIR}/data;
-export SERIALIZATION_DIR=${CBTM_DIR}/experiments;
-export KMEANS_DIR=${CBTM_DIR}/clusterers;
-export CLUSTERS_DIR=${CBTM_DIR}/clusters;
-export VOCAB_DIR=$CBTM_DIR/vocab
-export PRETRAINED_MODELS_DIR=${CBTM_DIR}/pretrained_models;
-mkdir -p ${CBTM_DIR} ${DATA_DIR} ${SERIALIZATION_DIR} ${KMEANS_DIR} ${CLUSTERS_DIR} ${VOCAB_DIR} ${PRETRAINED_MODELS_DIR};
+export XELM_DIR=$PWD; 
+export DATA_DIR=${XELM_DIR}/data;
+export SERIALIZATION_DIR=${XELM_DIR}/experiments;
+export KMEANS_DIR=${XELM_DIR}/clusterers;
+export CLUSTERS_DIR=${XELM_DIR}/clusters;
+export VOCAB_DIR=$XELM_DIR/vocab
+export PRETRAINED_MODELS_DIR=${XELM_DIR}/pretrained_models;
+mkdir -p ${XELM_DIR} ${DATA_DIR} ${SERIALIZATION_DIR} ${KMEANS_DIR} ${CLUSTERS_DIR} ${VOCAB_DIR} ${PRETRAINED_MODELS_DIR};
 ```
 
 
 ### Configure cbtm_constants.py
-
 
 Next, the constants necessary to make this repo work are at `metaseq/cbtm_constants.py`. Modify these to suit your local environment. 
 
