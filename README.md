@@ -37,6 +37,8 @@ pip3 install torch==1.10.1+cu113  -f https://download.pytorch.org/whl/cu113/torc
 
 Make sure you have a GPU and CUDA visible for this step.
 
+If you run into a missing cudnn/driver error, you may need to install `cuda-toolkit` before Megatron: `conda install nvidia::cuda-toolkit`.
+
 ```bash
 git clone --branch fairseq_v2 https://github.com/ngoyal2707/Megatron-LM.git
 cd Megatron-LM
